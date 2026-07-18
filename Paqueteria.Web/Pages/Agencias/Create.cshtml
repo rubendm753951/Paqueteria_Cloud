@@ -1,0 +1,160 @@
+@page
+@model Paqueteria.Web.Pages.Agencias.CreateModel
+
+        @{
+        ViewData["Title"] = "Create";
+        }
+        
+        <h1>Create</h1>
+        
+    <h4>CAgencia</h4>
+    <hr />
+    <div class="row">
+    <div class="col-md-4">
+    <form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CAgencia.IdCorporativo" class="control-label"></label>
+                <select asp-for="CAgencia.IdCorporativo" class ="form-control" asp-items="ViewBag.IdCorporativo" ></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.IdPais" class="control-label"></label>
+                <select asp-for="CAgencia.IdPais" class ="form-control" asp-items="ViewBag.IdPais" ></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.Nombre" class="control-label"></label>
+                <input asp-for="CAgencia.Nombre" class="form-control" />
+                <span asp-validation-for="CAgencia.Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.Direccion" class="control-label"></label>
+                <input asp-for="CAgencia.Direccion" class="form-control" />
+                <span asp-validation-for="CAgencia.Direccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.EstadoProvincia" class="control-label"></label>
+                <input asp-for="CAgencia.EstadoProvincia" class="form-control" />
+                <span asp-validation-for="CAgencia.EstadoProvincia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.Ciudad" class="control-label"></label>
+                <input asp-for="CAgencia.Ciudad" class="form-control" />
+                <span asp-validation-for="CAgencia.Ciudad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.Telefono" class="control-label"></label>
+                <input asp-for="CAgencia.Telefono" class="form-control" />
+                <span asp-validation-for="CAgencia.Telefono" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.FechaAlta" class="control-label"></label>
+                <input asp-for="CAgencia.FechaAlta" class="form-control" />
+                <span asp-validation-for="CAgencia.FechaAlta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.FechaTermino" class="control-label"></label>
+                <input asp-for="CAgencia.FechaTermino" class="form-control" />
+                <span asp-validation-for="CAgencia.FechaTermino" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.IdMoneda" class="control-label"></label>
+                <select asp-for="CAgencia.IdMoneda" class ="form-control" asp-items="ViewBag.IdMoneda" ></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.LimiteCredito" class="control-label"></label>
+                <input asp-for="CAgencia.LimiteCredito" class="form-control" />
+                <span asp-validation-for="CAgencia.LimiteCredito" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.Nit" class="control-label"></label>
+                <input asp-for="CAgencia.Nit" class="form-control" />
+                <span asp-validation-for="CAgencia.Nit" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CAgencia.RequiereAsignacion" /> @Html.DisplayNameFor(model => model.CAgencia.RequiereAsignacion)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.IdRecibo" class="control-label"></label>
+                <select asp-for="CAgencia.IdRecibo" class ="form-control" asp-items="ViewBag.IdRecibo" ></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.Factor" class="control-label"></label>
+                <input asp-for="CAgencia.Factor" class="form-control" />
+                <span asp-validation-for="CAgencia.Factor" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CAgencia.EsquemaPorFactor" /> @Html.DisplayNameFor(model => model.CAgencia.EsquemaPorFactor)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.CostoAdicional" class="control-label"></label>
+                <input asp-for="CAgencia.CostoAdicional" class="form-control" />
+                <span asp-validation-for="CAgencia.CostoAdicional" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CAgencia.GuiaEstafeta" /> @Html.DisplayNameFor(model => model.CAgencia.GuiaEstafeta)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.Noexterior" class="control-label"></label>
+                <input asp-for="CAgencia.Noexterior" class="form-control" />
+                <span asp-validation-for="CAgencia.Noexterior" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.Colonia" class="control-label"></label>
+                <input asp-for="CAgencia.Colonia" class="form-control" />
+                <span asp-validation-for="CAgencia.Colonia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.Municipio" class="control-label"></label>
+                <input asp-for="CAgencia.Municipio" class="form-control" />
+                <span asp-validation-for="CAgencia.Municipio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.CodigoPostal" class="control-label"></label>
+                <input asp-for="CAgencia.CodigoPostal" class="form-control" />
+                <span asp-validation-for="CAgencia.CodigoPostal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.Email" class="control-label"></label>
+                <input asp-for="CAgencia.Email" class="form-control" />
+                <span asp-validation-for="CAgencia.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.Rfc" class="control-label"></label>
+                <input asp-for="CAgencia.Rfc" class="form-control" />
+                <span asp-validation-for="CAgencia.Rfc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CAgencia.TipoDePago" class="control-label"></label>
+                <input asp-for="CAgencia.TipoDePago" class="form-control" />
+                <span asp-validation-for="CAgencia.TipoDePago" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CAgencia.PeRemitente" /> @Html.DisplayNameFor(model => model.CAgencia.PeRemitente)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CAgencia.FedexRemitente" /> @Html.DisplayNameFor(model => model.CAgencia.FedexRemitente)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

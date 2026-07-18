@@ -1,0 +1,192 @@
+@page
+@model Paqueteria.Web.Pages.Agencias.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].Direccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].EstadoProvincia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].Ciudad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].Telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].FechaAlta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].FechaTermino)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].LimiteCredito)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].Nit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].RequiereAsignacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].Factor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].EsquemaPorFactor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].CostoAdicional)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].GuiaEstafeta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].Noexterior)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].Colonia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].Municipio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].CodigoPostal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].Rfc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].TipoDePago)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].PeRemitente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].FedexRemitente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].IdCorporativoNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].IdMonedaNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].IdPaisNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CAgencia[0].IdReciboNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.CAgencia) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Direccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstadoProvincia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ciudad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaAlta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaTermino)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LimiteCredito)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequiereAsignacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Factor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EsquemaPorFactor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CostoAdicional)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GuiaEstafeta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Noexterior)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Colonia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Municipio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CodigoPostal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rfc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoDePago)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PeRemitente)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FedexRemitente)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdCorporativoNavigation.IdCorporativo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdMonedaNavigation.IdMoneda)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdPaisNavigation.IdPais)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdReciboNavigation.IdRecibo)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.IdAgencia">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.IdAgencia">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.IdAgencia">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
