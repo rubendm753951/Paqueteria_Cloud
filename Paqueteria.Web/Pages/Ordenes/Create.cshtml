@@ -1,0 +1,324 @@
+@page
+@model Paqueteria.Web.Pages.Ordenes.CreateModel
+@{
+    ViewData["Title"] = "Nueva orden";
+}
+
+<section class="order-entry">
+    <header class="order-heading">
+        <div>
+            <p class="order-kicker">SIEXPRO / OPERACIONES</p>
+            <h1>Nueva orden</h1>
+            <p>Captura las direcciones, el servicio y los paquetes del envío.</p>
+        </div>
+        <a asp-page="/Index" class="order-back">Volver al inicio</a>
+    </header>
+
+    @if (!string.IsNullOrEmpty(Model.StatusMessage))
+    {
+        <div class="order-success" role="status">@Model.StatusMessage</div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.CreatedTrackingNumber))
+    {
+        <div class="order-success" role="status">
+            <strong>Orden creada.</strong>
+            <span>Número de rastreo: <code>@Model.CreatedTrackingNumber</code></span>
+            <span>Total aceptado: <strong>@Model.CreatedTotalText @Model.CreatedCurrency</strong></span>
+        </div>
+    }
+
+    <form method="post" asp-page-handler="Quote" id="order-form" class="order-form">
+        <div asp-validation-summary="All" class="order-validation" role="alert"></div>
+
+        <section class="order-section" aria-labelledby="addresses-title">
+            <div class="order-section-heading">
+                <span class="order-step">01</span>
+                <div>
+                    <p class="order-kicker">CONTACTOS Y DIRECCIONES</p>
+                    <h2 id="addresses-title">Origen y destino</h2>
+                </div>
+            </div>
+
+            <div class="address-grid">
+                <fieldset class="address-panel">
+                    <legend>Remitente</legend>
+                    <div class="address-fields">
+                        <div class="order-field"><label asp-for="Input.Sender.ContactName">Nombre de contacto</label><input asp-for="Input.Sender.ContactName" autocomplete="name" /><span asp-validation-for="Input.Sender.ContactName"></span></div>
+                        <div class="order-field"><label asp-for="Input.Sender.Company">Empresa</label><input asp-for="Input.Sender.Company" autocomplete="organization" /></div>
+                        <div class="order-field address-wide"><label asp-for="Input.Sender.AddressLine1">Dirección</label><input asp-for="Input.Sender.AddressLine1" autocomplete="address-line1" /></div>
+                        <div class="order-field address-wide"><label asp-for="Input.Sender.AddressLine2">Interior, referencias (opcional)</label><input asp-for="Input.Sender.AddressLine2" autocomplete="address-line2" /></div>
+                        <div class="order-field"><label asp-for="Input.Sender.PostalCode">Código postal</label><input asp-for="Input.Sender.PostalCode" autocomplete="postal-code" /></div>
+                        <div class="order-field"><label asp-for="Input.Sender.Neighborhood">Colonia</label><input asp-for="Input.Sender.Neighborhood" autocomplete="address-level3" /></div>
+                        <div class="order-field"><label asp-for="Input.Sender.Municipality">Municipio</label><input asp-for="Input.Sender.Municipality" autocomplete="address-level2" /></div>
+                        <div class="order-field"><label asp-for="Input.Sender.State">Estado</label><input asp-for="Input.Sender.State" autocomplete="address-level1" /></div>
+                        <div class="order-field"><label asp-for="Input.Sender.Phone">Teléfono</label><input asp-for="Input.Sender.Phone" autocomplete="tel" /></div>
+                        <div class="order-field"><label asp-for="Input.Sender.Email">Correo</label><input asp-for="Input.Sender.Email" autocomplete="email" /></div>
+                        <input asp-for="Input.Sender.Country" type="hidden" />
+                    </div>
+                </fieldset>
+
+                <fieldset class="address-panel">
+                    <legend>Destinatario</legend>
+                    <div class="address-fields">
+                        <div class="order-field"><label asp-for="Input.Recipient.ContactName">Nombre de contacto</label><input asp-for="Input.Recipient.ContactName" autocomplete="name" /><span asp-validation-for="Input.Recipient.ContactName"></span></div>
+                        <div class="order-field"><label asp-for="Input.Recipient.Company">Empresa</label><input asp-for="Input.Recipient.Company" autocomplete="organization" /></div>
+                        <div class="order-field address-wide"><label asp-for="Input.Recipient.AddressLine1">Dirección</label><input asp-for="Input.Recipient.AddressLine1" autocomplete="shipping address-line1" /></div>
+                        <div class="order-field address-wide"><label asp-for="Input.Recipient.AddressLine2">Interior, referencias (opcional)</label><input asp-for="Input.Recipient.AddressLine2" autocomplete="shipping address-line2" /></div>
+                        <div class="order-field"><label asp-for="Input.Recipient.PostalCode">Código postal</label><input asp-for="Input.Recipient.PostalCode" autocomplete="shipping postal-code" /></div>
+                        <div class="order-field"><label asp-for="Input.Recipient.Neighborhood">Colonia</label><input asp-for="Input.Recipient.Neighborhood" autocomplete="address-level3" /></div>
+                        <div class="order-field"><label asp-for="Input.Recipient.Municipality">Municipio</label><input asp-for="Input.Recipient.Municipality" autocomplete="address-level2" /></div>
+                        <div class="order-field"><label asp-for="Input.Recipient.State">Estado</label><input asp-for="Input.Recipient.State" autocomplete="address-level1" /></div>
+                        <div class="order-field"><label asp-for="Input.Recipient.Phone">Teléfono</label><input asp-for="Input.Recipient.Phone" autocomplete="tel" /></div>
+                        <div class="order-field"><label asp-for="Input.Recipient.Email">Correo</label><input asp-for="Input.Recipient.Email" autocomplete="email" /></div>
+                        <input asp-for="Input.Recipient.Country" type="hidden" />
+                    </div>
+                </fieldset>
+            </div>
+        </section>
+
+        <section class="order-section" aria-labelledby="service-title">
+            <div class="order-section-heading">
+                <span class="order-step">02</span>
+                <div>
+                    <p class="order-kicker">SERVICIO</p>
+                    <h2 id="service-title">Agencia y producto</h2>
+                </div>
+            </div>
+            <div class="service-fields">
+                <div class="order-field">
+                    <label asp-for="Input.AgencyId">Agencia</label>
+                    <select asp-for="Input.AgencyId" id="agency-select">
+                        <option value="0">Selecciona una agencia</option>
+                        @foreach (var agency in Model.Agencies)
+                        {
+                            <option value="@agency.Id">@agency.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Input.AgencyId"></span>
+                </div>
+                <div class="order-field">
+                    <label asp-for="Input.ProductId">Producto</label>
+                    <select asp-for="Input.ProductId" id="product-select" data-selected-product="@Model.Input.ProductId" disabled>
+                        <option value="">Primero selecciona una agencia</option>
+                    </select>
+                    <span asp-validation-for="Input.ProductId"></span>
+                </div>
+            </div>
+            <label class="coverage-option">
+                <input asp-for="Input.ExtendedCoverage" id="coverage-option" />
+                <span><strong>Cobertura extendida</strong><small id="coverage-price">Cargo según el producto seleccionado</small></span>
+            </label>
+            <p id="product-error" class="product-error" role="status"></p>
+        </section>
+
+        <section class="order-section" aria-labelledby="packages-title">
+            <div class="order-section-heading">
+                <span class="order-step">03</span>
+                <div>
+                    <p class="order-kicker">CARGA</p>
+                    <h2 id="packages-title">Paquetes</h2>
+                </div>
+                <button type="button" id="add-package" class="order-secondary-button">+ Añadir paquete</button>
+            </div>
+
+            <div id="package-list" class="package-list">
+                @for (var packageIndex = 0; packageIndex < Model.Input.Packages.Count; packageIndex++)
+                {
+                    var package = Model.Input.Packages[packageIndex];
+                    <article class="package-panel" data-package-index="@packageIndex">
+                        <div class="package-heading"><strong>Paquete @(packageIndex + 1)</strong><span class="package-status">@(packageIndex + 1) de @Model.Input.Packages.Count</span>
+                            @if (Model.Input.Packages.Count > 1)
+                            {
+                                <button type="button" class="remove-package" aria-label="Eliminar paquete @(packageIndex + 1)">Eliminar</button>
+                            }
+                        </div>
+                        <div class="package-fields">
+                            <div class="order-field"><label for="Input_Packages_@(packageIndex)_WeightKg">Peso báscula (kg)</label><input id="Input_Packages_@(packageIndex)_WeightKg" name="Input.Packages[@packageIndex].WeightKg" value="@package.WeightKg" type="number" min="0.001" step="0.001" required data-dimension-input /></div>
+                            <div class="order-field"><label for="Input_Packages_@(packageIndex)_LengthCm">Largo (cm)</label><input id="Input_Packages_@(packageIndex)_LengthCm" name="Input.Packages[@packageIndex].LengthCm" value="@package.LengthCm" type="number" min="0.01" step="0.01" required data-dimension-input /></div>
+                            <div class="order-field"><label for="Input_Packages_@(packageIndex)_WidthCm">Ancho (cm)</label><input id="Input_Packages_@(packageIndex)_WidthCm" name="Input.Packages[@packageIndex].WidthCm" value="@package.WidthCm" type="number" min="0.01" step="0.01" required data-dimension-input /></div>
+                            <div class="order-field"><label for="Input_Packages_@(packageIndex)_HeightCm">Alto (cm)</label><input id="Input_Packages_@(packageIndex)_HeightCm" name="Input.Packages[@packageIndex].HeightCm" value="@package.HeightCm" type="number" min="0.01" step="0.01" required data-dimension-input /></div>
+                            <div class="order-field package-content"><label for="Input_Packages_@(packageIndex)_Description">Contenido</label><input id="Input_Packages_@(packageIndex)_Description" name="Input.Packages[@packageIndex].Description" value="@package.Description" maxlength="240" required /></div>
+                        </div>
+                        <div class="package-calculation" aria-live="polite">
+                            <span>Volumétrico <strong data-volumetric>—</strong></span>
+                            <span>Peso cobrable <strong data-billable>Captura dimensiones</strong></span>
+                        </div>
+                    </article>
+                }
+            </div>
+            <p class="order-note">Peso volumétrico = largo × ancho × alto ÷ 5,000. Se cobra el mayor entre peso báscula y volumétrico, redondeado al incremento del servicio.</p>
+        </section>
+
+        @if (Model.QuotePreview is not null)
+        {
+            <section class="quote-review" aria-labelledby="quote-review-title">
+                <input asp-for="QuoteToken" type="hidden" />
+                <header class="quote-review-heading">
+                    <div>
+                        <p class="order-kicker">COTIZACIÓN LISTA</p>
+                        <h2 id="quote-review-title">Revisa antes de crear la orden</h2>
+                        <p>@Model.QuotePreview.ProductName · @Model.QuotePreview.Packages.Count paquete(s)</p>
+                    </div>
+                    <div class="quote-total"><small>Total del envío</small><strong>@Model.QuotePreview.Total.ToString("N2") @Model.QuotePreview.Currency</strong></div>
+                </header>
+
+                <div class="quote-package-list">
+                    @for (var index = 0; index < Model.QuotePreview.Packages.Count; index++)
+                    {
+                        var package = Model.QuotePreview.Packages[index];
+                        <div class="quote-package-row">
+                            <strong>Paquete @(index + 1)</strong>
+                            <span>Peso volumétrico @package.VolumetricWeightKg.ToString("N3") kg</span>
+                            <span>Peso cobrable @package.BillableWeightKg.ToString("N3") kg</span>
+                            <span>Base @package.BasePrice.ToString("N2")</span>
+                            @if (package.ExtraWeightPrice > 0)
+                            {
+                                <span>Kg adicionales @package.ExtraWeightPrice.ToString("N2")</span>
+                            }
+                            @if (package.DimensionalSurcharge > 0)
+                            {
+                                <span>Dimensiones extra @package.DimensionalSurcharge.ToString("N2")</span>
+                            }
+                            <strong>@package.Total.ToString("N2") @Model.QuotePreview.Currency</strong>
+                        </div>
+                    }
+                </div>
+
+                @if (Model.QuotePreview.ExtendedCoverageSurcharge > 0)
+                {
+                    <div class="quote-coverage-row"><span>Cobertura extendida</span><strong>@Model.QuotePreview.ExtendedCoverageSurcharge.ToString("N2") @Model.QuotePreview.Currency</strong></div>
+                }
+
+                <div class="quote-review-actions">
+                    <span>Válida hasta @Model.QuotePreview.ExpiresAtUtc.ToLocalTime().ToString("HH:mm")</span>
+                    <div>
+                        <button type="submit" formaction="?handler=Reject" formnovalidate class="quote-reject">Rechazar y editar</button>
+                        <button type="submit" formaction="?handler=Confirm" formnovalidate class="quote-accept">Aceptar cotización y guardar <span aria-hidden="true">&rarr;</span></button>
+                    </div>
+                </div>
+            </section>
+        }
+
+        <footer class="order-submit-bar">
+            <span>La cotización se calcula con las tarifas vigentes del servicio.</span>
+            <button type="submit" class="order-submit">Solicitar cotización <span aria-hidden="true">&rarr;</span></button>
+        </footer>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (() => {
+            const agencySelect = document.getElementById('agency-select');
+            const productSelect = document.getElementById('product-select');
+            const productError = document.getElementById('product-error');
+            const coveragePrice = document.getElementById('coverage-price');
+            const packageList = document.getElementById('package-list');
+            const addPackageButton = document.getElementById('add-package');
+            let packageCount = packageList.querySelectorAll('.package-panel').length;
+            let weightIncrement = 1;
+            let activeProducts = [];
+
+            function updatePackage(panel) {
+                const values = [...panel.querySelectorAll('[data-dimension-input]')].map(input => Number(input.value));
+                const [weight, length, width, height] = values;
+                const volumetric = length > 0 && width > 0 && height > 0 ? length * width * height / 5000 : 0;
+                const billable = Math.max(weight || 0, volumetric);
+                const rounded = billable > 0 ? Math.ceil((billable - 1e-9) / weightIncrement) * weightIncrement : 0;
+                panel.querySelector('[data-volumetric]').textContent = volumetric ? `${volumetric.toFixed(3)} kg` : '—';
+                panel.querySelector('[data-billable]').textContent = rounded ? `${rounded.toFixed(3)} kg` : 'Captura dimensiones';
+            }
+
+            function updatePackages() {
+                const panels = [...packageList.querySelectorAll('.package-panel')];
+                panels.forEach((panel, index) => {
+                    panel.querySelector('.package-heading strong').textContent = `Paquete ${index + 1}`;
+                    panel.querySelector('.package-status').textContent = `${index + 1} de ${panels.length}`;
+                    const remove = panel.querySelector('.remove-package');
+                    if (remove) remove.disabled = panels.length === 1;
+                    panel.querySelectorAll('[name]').forEach(input => {
+                        input.name = input.name.replace(/Input\.Packages\[\d+\]/, `Input.Packages[${index}]`);
+                        input.id = input.id.replace(/Input_Packages_\d+_/, `Input_Packages_${index}_`);
+                    });
+                    panel.querySelectorAll('label[for]').forEach(label => {
+                        label.htmlFor = label.htmlFor.replace(/Input_Packages_\d+_/, `Input_Packages_${index}_`);
+                    });
+                    updatePackage(panel);
+                });
+                addPackageButton.disabled = panels.length >= 10;
+            }
+
+            addPackageButton.addEventListener('click', () => {
+                if (packageCount >= 10) return;
+                const original = packageList.querySelector('.package-panel');
+                const panel = original.cloneNode(true);
+                panel.querySelectorAll('input').forEach(input => { input.value = ''; });
+                const removeButton = document.createElement('button');
+                removeButton.type = 'button';
+                removeButton.className = 'remove-package';
+                removeButton.setAttribute('aria-label', 'Eliminar paquete');
+                removeButton.textContent = 'Eliminar';
+                panel.querySelector('.package-heading').append(removeButton);
+                packageList.append(panel);
+                packageCount++;
+                updatePackages();
+            });
+
+            packageList.addEventListener('click', event => {
+                const removeButton = event.target.closest('.remove-package');
+                if (!removeButton || packageList.querySelectorAll('.package-panel').length <= 1) return;
+                removeButton.closest('.package-panel').remove();
+                packageCount = packageList.querySelectorAll('.package-panel').length;
+                updatePackages();
+            });
+
+            packageList.addEventListener('input', event => {
+                const panel = event.target.closest('.package-panel');
+                if (panel && event.target.matches('[data-dimension-input]')) updatePackage(panel);
+            });
+
+            agencySelect.addEventListener('change', async () => {
+                productError.textContent = '';
+                productSelect.replaceChildren(new Option('Cargando productos…', ''));
+                productSelect.disabled = true;
+                activeProducts = [];
+                if (!agencySelect.value || agencySelect.value === '0') {
+                    productSelect.replaceChildren(new Option('Primero selecciona una agencia', ''));
+                    return;
+                }
+                try {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('handler', 'Products');
+                    url.searchParams.set('agencyId', agencySelect.value);
+                    const response = await fetch(url, { headers: { Accept: 'application/json' } });
+                    if (!response.ok) throw new Error('No fue posible cargar los productos.');
+                    activeProducts = await response.json();
+                    productSelect.replaceChildren(new Option('Selecciona un producto', ''));
+                    activeProducts.forEach(product => productSelect.add(new Option(`${product.label} · ${product.sku}`, product.id)));
+                            const selectedProduct = productSelect.dataset.selectedProduct;
+                            if (selectedProduct) productSelect.value = selectedProduct;
+                    productSelect.dataset.selectedProduct = '';
+                    productSelect.disabled = activeProducts.length === 0;
+                    if (!activeProducts.length) productError.textContent = 'Esta agencia no tiene productos tarifados disponibles.';
+                } catch (error) {
+                    productSelect.replaceChildren(new Option('No disponible', ''));
+                    productError.textContent = error.message;
+                }
+            });
+
+            productSelect.addEventListener('change', () => {
+                const product = activeProducts.find(item => item.id === productSelect.value);
+                if (product) {
+                    weightIncrement = Number(product.weightIncrementKg) || 1;
+                    coveragePrice.textContent = `${Number(product.extendedCoveragePrice).toFixed(2)} ${product.currency}`;
+                    updatePackages();
+                }
+            });
+
+            updatePackages();
+            if (agencySelect.value && agencySelect.value !== '0') agencySelect.dispatchEvent(new Event('change'));
+        })();
+    </script>
+}

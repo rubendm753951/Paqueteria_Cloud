@@ -2,7 +2,7 @@
 @model Paqueteria.Web.Pages.Agencias.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle de agencia";
 }
 
 <h1>Details</h1>
@@ -153,29 +153,33 @@
             @Html.DisplayNameFor(model => model.CAgencia.IdCorporativoNavigation)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CAgencia.IdCorporativoNavigation.IdCorporativo)
+            @Html.DisplayFor(model => model.CAgencia.IdCorporativoNavigation.Nombre)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CAgencia.IdMonedaNavigation)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CAgencia.IdMonedaNavigation.IdMoneda)
+            @Html.DisplayFor(model => model.CAgencia.IdMonedaNavigation.Nombre)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CAgencia.IdPaisNavigation)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CAgencia.IdPaisNavigation.IdPais)
+            @Html.DisplayFor(model => model.CAgencia.IdPaisNavigation.Nombre)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CAgencia.IdReciboNavigation)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CAgencia.IdReciboNavigation.IdRecibo)
+            @Html.DisplayFor(model => model.CAgencia.IdReciboNavigation.Descripcion)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.CAgencia.IdAgencia">Edit</a> |
+    @if (Model.CanEditAgency)
+    {
+        <a asp-page="./Create" asp-route-agencyId="@Model.CAgencia.IdAgencia">Editar agencia</a>
+        <span> | </span>
+    }
     <a asp-page="./Index">Back to List</a>
 </div>

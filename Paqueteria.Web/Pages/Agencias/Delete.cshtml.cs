@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,10 +14,12 @@ namespace Paqueteria.Web.Pages.Agencias
     public class DeleteModel : PageModel
     {
         private readonly Paqueteria.Web.Data.PaqueteriaDbContext _context;
+        private readonly AgencyAccessService _agencyAccess;
 
-        public DeleteModel(Paqueteria.Web.Data.PaqueteriaDbContext context)
+        public DeleteModel(Paqueteria.Web.Data.PaqueteriaDbContext context, AgencyAccessService agencyAccess)
         {
             _context = context;
+            _agencyAccess = agencyAccess;
         }
 
         [BindProperty]
@@ -25,6 +28,17 @@ namespace Paqueteria.Web.Pages.Agencias
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Challenge();
+            }
+
+            if (!await _agencyAccess.CanDeleteAgencyAsync(userId, id.Value))
             {
                 return NotFound();
             }
@@ -44,6 +58,17 @@ namespace Paqueteria.Web.Pages.Agencias
         public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (id == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Challenge();
+            }
+
+            if (!await _agencyAccess.CanDeleteAgencyAsync(userId, id.Value))
             {
                 return NotFound();
             }
