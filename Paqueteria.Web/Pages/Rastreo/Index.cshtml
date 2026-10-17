@@ -1,0 +1,94 @@
+@page
+@model Paqueteria.Web.Pages.Rastreo.IndexModel
+@{
+    ViewData["Title"] = "Rastrear envío";
+}
+
+<section class="public-tracking-shell">
+    <div class="public-tracking-hero">
+        <p class="text-uppercase small mb-2">SiExPro · Seguimiento</p>
+        <h1>Rastrea tu envío</h1>
+        <p class="lead mb-0">Consulta el estado más reciente de tu paquete con tu número de tracking.</p>
+    </div>
+
+    <div class="card shadow-sm public-tracking-search-card">
+        <div class="card-body p-4">
+            <form method="post" asp-page-handler="Search">
+                <label asp-for="Search.TrackingNumber" class="form-label fw-semibold">Número de tracking</label>
+                <div class="input-group input-group-lg">
+                    <input asp-for="Search.TrackingNumber" class="form-control" placeholder="Ej. SXP261010-..." autocomplete="off" autocapitalize="characters" />
+                    <button class="btn btn-primary px-4" type="submit">Rastrear</button>
+                </div>
+                <span asp-validation-for="Search.TrackingNumber" class="text-danger"></span>
+            </form>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+    {
+        <div class="alert alert-success mt-4">@Model.StatusMessage</div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.SearchMessage))
+    {
+        <div class="alert alert-warning mt-4">@Model.SearchMessage</div>
+    }
+
+    @if (Model.Shipment is not null)
+    {
+        <div class="public-tracking-result mt-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body p-4 d-flex flex-wrap justify-content-between gap-3">
+                    <div>
+                        <p class="text-uppercase text-muted small mb-1">Número de tracking</p>
+                        <h2 class="h4 mb-2">@Model.Shipment.TrackingNumber</h2>
+                        @if (!string.IsNullOrWhiteSpace(Model.Shipment.City) || !string.IsNullOrWhiteSpace(Model.Shipment.State))
+                        {
+                            <p class="text-muted mb-0">Destino: @Model.Shipment.City@(string.IsNullOrWhiteSpace(Model.Shipment.City) || string.IsNullOrWhiteSpace(Model.Shipment.State) ? "" : ", ")@Model.Shipment.State</p>
+                        }
+                    </div>
+                    <div class="text-md-end"><p class="text-uppercase text-muted small mb-1">Estado actual</p><span class="badge text-bg-primary fs-6">@Model.Shipment.Status</span></div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header fw-semibold">Actualizaciones del envío</div>
+                <div class="card-body p-4">
+                    @if (Model.Shipment.Events.Count == 0)
+                    {
+                        <p class="text-muted mb-0">Aún no hay actualizaciones disponibles.</p>
+                    }
+                    else
+                    {
+                        <div class="public-tracking-timeline">
+                            @foreach (var item in Model.Shipment.Events)
+                            {
+                                <div class="public-tracking-event">
+                                    <span class="public-tracking-dot" aria-hidden="true"></span>
+                                    <div><div class="fw-semibold">@item.Title</div><div class="small text-muted">@item.EventAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</div><p class="mb-0 mt-1">@item.Description</p></div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h3 class="h5">Recibe actualizaciones</h3>
+                    <p class="text-muted">Registra tu correo para recibir cambios importantes sobre este envío. No se crea una cuenta del sistema.</p>
+                    <form method="post" asp-page-handler="Subscribe" class="row g-2 align-items-end">
+                        <input type="hidden" asp-for="Subscription.TrackingNumber" value="@Model.Shipment.TrackingNumber" />
+                        <div class="col-md-8"><label asp-for="Subscription.Email" class="form-label">Correo electrónico</label><input asp-for="Subscription.Email" class="form-control" type="email" placeholder="tu@correo.com" autocomplete="email" /><span asp-validation-for="Subscription.Email" class="text-danger"></span></div>
+                        <div class="col-md-4"><button class="btn btn-outline-primary w-100" type="submit">Solicitar avisos</button></div>
+                    </form>
+                    <small class="text-muted d-block mt-3">Podrás cancelar las notificaciones desde el correo de confirmación.</small>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -50,6 +50,72 @@ public sealed class ShipmentOrder
     public decimal TotalEnvio { get; set; }
     public string Moneda { get; set; } = "MXN";
     public string? CreadaPorUserId { get; set; }
+    public long? AssignedDriverId { get; set; }
+    public DateTimeOffset? DeliveredAt { get; set; }
+}
+
+public sealed class DeliveryDriver
+{
+    public long Id { get; set; }
+    public int AgencyId { get; set; }
+    public string EmployeeCode { get; set; } = string.Empty;
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
+    public string? LicenseNumber { get; set; }
+    public string Status { get; set; } = "activo";
+    public DateTimeOffset CreatedAt { get; set; }
+}
+
+public sealed class ShipmentTrackingEvent
+{
+    public long Id { get; set; }
+    public int AgencyId { get; set; }
+    public Guid ShipmentOrderId { get; set; }
+    public string EventCode { get; set; } = string.Empty;
+    public string? PreviousStatus { get; set; }
+    public string NewStatus { get; set; } = string.Empty;
+    public DateTimeOffset EventAt { get; set; }
+    public string? LocationText { get; set; }
+    public string? Description { get; set; }
+    public string? CreatedByUserId { get; set; }
+}
+
+public sealed class DeliveryAttempt
+{
+    public long Id { get; set; }
+    public int AgencyId { get; set; }
+    public Guid ShipmentOrderId { get; set; }
+    public long? DriverId { get; set; }
+    public int AttemptNumber { get; set; }
+    public DateTimeOffset AttemptedAt { get; set; }
+    public string ResultCode { get; set; } = string.Empty;
+    public string? Notes { get; set; }
+    public string NextAction { get; set; } = "reintentar";
+}
+
+public sealed class ProofOfDelivery
+{
+    public long Id { get; set; }
+    public int AgencyId { get; set; }
+    public Guid ShipmentOrderId { get; set; }
+    public long? DriverId { get; set; }
+    public string ReceivedByName { get; set; } = string.Empty;
+    public string? Relationship { get; set; }
+    public DateTimeOffset DeliveredAt { get; set; }
+    public string? DeliveryNotes { get; set; }
+}
+
+public sealed class TrackingSubscription
+{
+    public long Id { get; set; }
+    public string TrackingNumber { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string ConfirmationToken { get; set; } = string.Empty;
+    public string Status { get; set; } = "pending";
+    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset? ConfirmedAt { get; set; }
+    public DateTimeOffset? UnsubscribedAt { get; set; }
 }
 
 public sealed class ShipmentAddress

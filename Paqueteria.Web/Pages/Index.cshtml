@@ -73,6 +73,21 @@
                     </div>
                 </article>
             }
+            @if (Model.CanViewShipments)
+            {
+                <article class="workspace-page workspace-order-card">
+                    <div class="workspace-page-top">
+                        <span class="workspace-page-mark" aria-hidden="true">TR</span>
+                        <span class="workspace-access-label">DISPONIBLE</span>
+                    </div>
+                    <h3>Seguimiento</h3>
+                    <p>Administra conductores, intentos de entrega y confirmaciones.</p>
+                    <div class="workspace-page-footer">
+                        <span>Operación de última milla</span>
+                        <a asp-page="/Envios/Index" class="workspace-open-link">Abrir módulo <span aria-hidden="true">&rarr;</span></a>
+                    </div>
+                </article>
+            }
         </div>
     }
     else

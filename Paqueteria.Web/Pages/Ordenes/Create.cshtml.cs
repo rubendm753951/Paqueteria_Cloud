@@ -248,7 +248,7 @@ public sealed class CreateModel(
                 IdProducto = pending.ProductId,
                 IdAgenciaProducto = pending.AgencyProductId,
                 FechaCreacion = DateTimeOffset.UtcNow,
-                EstadoOrden = "cotizada",
+                EstadoOrden = "confirmada",
                 CoberturaExtendida = pending.ExtendedCoverage,
                 CoberturaExtendidaPrecioSnapshot = pending.Quote.ExtendedCoverageSurcharge,
                 TotalEnvio = pending.Quote.Total,
@@ -257,6 +257,16 @@ public sealed class CreateModel(
             };
 
             context.ShipmentOrders.Add(order);
+            context.ShipmentTrackingEvents.Add(new ShipmentTrackingEvent
+            {
+                AgencyId = pending.AgencyId,
+                ShipmentOrderId = orderId,
+                EventCode = "SHIPMENT_CREATED",
+                NewStatus = order.EstadoOrden,
+                EventAt = DateTimeOffset.UtcNow,
+                Description = "Orden creada después de aceptar la cotización",
+                CreatedByUserId = userId
+            });
             context.ShipmentAddresses.Add(CreateAddress(orderId, "remitente", pending.Sender));
             context.ShipmentAddresses.Add(CreateAddress(orderId, "destinatario", pending.Recipient));
 

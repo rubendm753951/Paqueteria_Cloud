@@ -40,6 +40,16 @@ public partial class PaqueteriaDbContext : DbContext
 
     public virtual DbSet<ShipmentPackage> ShipmentPackages { get; set; }
 
+    public virtual DbSet<DeliveryDriver> DeliveryDrivers { get; set; }
+
+    public virtual DbSet<ShipmentTrackingEvent> ShipmentTrackingEvents { get; set; }
+
+    public virtual DbSet<DeliveryAttempt> DeliveryAttempts { get; set; }
+
+    public virtual DbSet<ProofOfDelivery> ProofsOfDelivery { get; set; }
+
+    public virtual DbSet<TrackingSubscription> TrackingSubscriptions { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ProductCatalogItem>(entity =>
@@ -105,6 +115,8 @@ public partial class PaqueteriaDbContext : DbContext
             entity.Property(e => e.TotalEnvio).HasColumnName("total_envio").HasPrecision(12, 2);
             entity.Property(e => e.Moneda).HasColumnName("moneda").HasColumnType("character(3)");
             entity.Property(e => e.CreadaPorUserId).HasColumnName("creada_por_user_id");
+            entity.Property(e => e.AssignedDriverId).HasColumnName("assigned_driver_id");
+            entity.Property(e => e.DeliveredAt).HasColumnName("delivered_at");
         });
 
         modelBuilder.Entity<ShipmentAddress>(entity =>
@@ -165,6 +177,86 @@ public partial class PaqueteriaDbContext : DbContext
             .HasForeignKey(package => package.IdOrden)
             .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("fk_shipment_packages_order");
+
+        modelBuilder.Entity<DeliveryDriver>(entity =>
+        {
+            entity.ToTable("delivery_drivers");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.AgencyId, e.EmployeeCode }).IsUnique();
+            entity.Property(e => e.Id).HasColumnName("id").UseIdentityAlwaysColumn();
+            entity.Property(e => e.AgencyId).HasColumnName("agency_id");
+            entity.Property(e => e.EmployeeCode).HasColumnName("employee_code").HasMaxLength(50).IsRequired();
+            entity.Property(e => e.FirstName).HasColumnName("first_name").HasMaxLength(100).IsRequired();
+            entity.Property(e => e.LastName).HasColumnName("last_name").HasMaxLength(100).IsRequired();
+            entity.Property(e => e.Phone).HasColumnName("phone").HasMaxLength(30).IsRequired();
+            entity.Property(e => e.LicenseNumber).HasColumnName("license_number").HasMaxLength(80);
+            entity.Property(e => e.Status).HasColumnName("status").HasMaxLength(20).HasDefaultValue("activo");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+        });
+
+        modelBuilder.Entity<ShipmentTrackingEvent>(entity =>
+        {
+            entity.ToTable("shipment_tracking_events");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.AgencyId, e.ShipmentOrderId, e.EventAt });
+            entity.Property(e => e.Id).HasColumnName("id").UseIdentityAlwaysColumn();
+            entity.Property(e => e.AgencyId).HasColumnName("agency_id");
+            entity.Property(e => e.ShipmentOrderId).HasColumnName("shipment_order_id");
+            entity.Property(e => e.EventCode).HasColumnName("event_code").HasMaxLength(40).IsRequired();
+            entity.Property(e => e.PreviousStatus).HasColumnName("previous_status").HasMaxLength(24);
+            entity.Property(e => e.NewStatus).HasColumnName("new_status").HasMaxLength(24).IsRequired();
+            entity.Property(e => e.EventAt).HasColumnName("event_at").HasDefaultValueSql("now()");
+            entity.Property(e => e.LocationText).HasColumnName("location_text").HasMaxLength(240);
+            entity.Property(e => e.Description).HasColumnName("description").HasMaxLength(500);
+            entity.Property(e => e.CreatedByUserId).HasColumnName("created_by_user_id");
+        });
+
+        modelBuilder.Entity<DeliveryAttempt>(entity =>
+        {
+            entity.ToTable("delivery_attempts");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.AgencyId, e.ShipmentOrderId, e.AttemptedAt });
+            entity.Property(e => e.Id).HasColumnName("id").UseIdentityAlwaysColumn();
+            entity.Property(e => e.AgencyId).HasColumnName("agency_id");
+            entity.Property(e => e.ShipmentOrderId).HasColumnName("shipment_order_id");
+            entity.Property(e => e.DriverId).HasColumnName("driver_id");
+            entity.Property(e => e.AttemptNumber).HasColumnName("attempt_number");
+            entity.Property(e => e.AttemptedAt).HasColumnName("attempted_at").HasDefaultValueSql("now()");
+            entity.Property(e => e.ResultCode).HasColumnName("result_code").HasMaxLength(40).IsRequired();
+            entity.Property(e => e.Notes).HasColumnName("notes").HasMaxLength(1000);
+            entity.Property(e => e.NextAction).HasColumnName("next_action").HasMaxLength(30).IsRequired();
+        });
+
+        modelBuilder.Entity<ProofOfDelivery>(entity =>
+        {
+            entity.ToTable("proofs_of_delivery");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.AgencyId, e.ShipmentOrderId }).IsUnique();
+            entity.Property(e => e.Id).HasColumnName("id").UseIdentityAlwaysColumn();
+            entity.Property(e => e.AgencyId).HasColumnName("agency_id");
+            entity.Property(e => e.ShipmentOrderId).HasColumnName("shipment_order_id");
+            entity.Property(e => e.DriverId).HasColumnName("driver_id");
+            entity.Property(e => e.ReceivedByName).HasColumnName("received_by_name").HasMaxLength(160).IsRequired();
+            entity.Property(e => e.Relationship).HasColumnName("relationship").HasMaxLength(80);
+            entity.Property(e => e.DeliveredAt).HasColumnName("delivered_at").HasDefaultValueSql("now()");
+            entity.Property(e => e.DeliveryNotes).HasColumnName("delivery_notes").HasMaxLength(1000);
+        });
+
+        modelBuilder.Entity<TrackingSubscription>(entity =>
+        {
+            entity.ToTable("tracking_subscriptions");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.TrackingNumber, e.Email }).IsUnique();
+            entity.HasIndex(e => e.ConfirmationToken).IsUnique();
+            entity.Property(e => e.Id).HasColumnName("id").UseIdentityAlwaysColumn();
+            entity.Property(e => e.TrackingNumber).HasColumnName("tracking_number").HasMaxLength(40).IsRequired();
+            entity.Property(e => e.Email).HasColumnName("email").HasMaxLength(254).IsRequired();
+            entity.Property(e => e.ConfirmationToken).HasColumnName("confirmation_token").HasMaxLength(80).IsRequired();
+            entity.Property(e => e.Status).HasColumnName("status").HasMaxLength(20).HasDefaultValue("pending");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("now()");
+            entity.Property(e => e.ConfirmedAt).HasColumnName("confirmed_at");
+            entity.Property(e => e.UnsubscribedAt).HasColumnName("unsubscribed_at");
+        });
 
         modelBuilder.Entity<UserPagePermission>(entity =>
         {

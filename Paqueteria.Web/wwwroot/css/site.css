@@ -29,3 +29,56 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+ .public-tracking-shell {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 1rem 0 3rem;
+}
+
+.public-tracking-hero {
+    background: linear-gradient(135deg, #102a43 0%, #1d4e89 100%);
+    color: #fff;
+    border-radius: 1rem;
+    padding: 3rem 2.5rem;
+    margin-bottom: -1.75rem;
+}
+
+.public-tracking-hero h1 {
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+.public-tracking-search-card {
+    position: relative;
+    margin: 0 1.5rem;
+}
+
+.public-tracking-event {
+    position: relative;
+    display: flex;
+    gap: 1rem;
+    padding: 0 0 1.5rem 1.5rem;
+    margin-left: .35rem;
+    border-left: 2px solid #d9e2ec;
+}
+
+.public-tracking-event:last-child {
+    border-left-color: transparent;
+    padding-bottom: 0;
+}
+
+.public-tracking-dot {
+    position: absolute;
+    left: -7px;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #1d72d8;
+    box-shadow: 0 0 0 4px #e6f0ff;
+}
+
+@media (max-width: 576px) {
+    .public-tracking-hero { padding: 2rem 1.25rem; }
+    .public-tracking-search-card { margin: 0 .5rem; }
+}

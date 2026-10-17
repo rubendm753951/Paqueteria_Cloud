@@ -1,0 +1,60 @@
+@page
+@model Paqueteria.Web.Pages.Envios.DetailsModel
+@{
+    ViewData["Title"] = "Detalle de envío";
+    string StatusLabel(string status) => status switch { "asignada" => "Asignada", "en_transito" => "En ruta", "intento_fallido" => "Intento fallido", "en_retencion" => "En retención", "entregada" => "Entregada", "cancelada" => "Cancelada", "devuelta" => "Devuelta", _ => status };
+}
+
+@if (Model.Shipment is null)
+{
+    <div class="alert alert-danger">No se encontró el envío.</div>
+    return;
+}
+
+<div class="d-flex justify-content-between align-items-start mb-4">
+    <div><a asp-page="./Index" class="text-decoration-none">&larr; Volver a envíos</a><p class="text-uppercase text-muted small mt-3 mb-1">Detalle operativo</p><h1 class="mb-1">@Model.Shipment.Tracking</h1><p class="text-muted mb-0">@Model.Shipment.AgencyName · creado @Model.Shipment.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</p></div>
+    <span class="badge text-bg-primary fs-6">@StatusLabel(Model.Shipment.Status)</span>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.StatusMessage)) { <div class="alert alert-success">@Model.StatusMessage</div> }
+<div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card shadow-sm mb-4"><div class="card-header fw-semibold">Línea de tiempo</div><div class="card-body">
+            @if (Model.Timeline.Count == 0) { <p class="text-muted mb-0">Todavía no hay eventos de seguimiento.</p> }
+            @foreach (var item in Model.Timeline) { <div class="border-start border-3 border-primary ps-3 pb-3 mb-2"><div class="fw-semibold">@item.EventCode</div><small class="text-muted">@item.EventAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm") · @item.PreviousStatus → @item.NewStatus</small>@if (!string.IsNullOrWhiteSpace(item.Description)) { <div>@item.Description</div> }</div> }
+        </div></div>
+
+        <div class="card shadow-sm mb-4"><div class="card-header fw-semibold">Intentos de entrega</div><div class="card-body">
+            @if (Model.Attempts.Count == 0) { <p class="text-muted">No se han registrado intentos.</p> }
+            else { <div class="table-responsive"><table class="table table-sm"><thead><tr><th>#</th><th>Motivo</th><th>Acción</th><th>Fecha</th><th>Notas</th></tr></thead><tbody>@foreach (var item in Model.Attempts) { <tr><td>@item.Number</td><td>@item.ResultCode</td><td>@item.NextAction</td><td>@item.AttemptedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td><td>@item.Notes</td></tr>}</tbody></table></div> }
+        </div></div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card shadow-sm mb-4"><div class="card-header fw-semibold">Asignación actual</div><div class="card-body">
+            <p class="mb-3">Conductor: <strong>@(Model.Shipment.DriverName ?? "Sin asignar")</strong></p>
+            <form method="post" asp-page-handler="Assign" asp-route-id="@Model.Id">
+                <div class="mb-3"><label class="form-label">Cambiar conductor</label><select name="driverId" class="form-select"><option value="">Sin asignar</option>@foreach (var driver in Model.Drivers) { <option value="@driver.Id">@driver.Name</option> }</select></div>
+                <button class="btn btn-outline-primary" type="submit">Guardar asignación</button>
+            </form>
+            @if (Model.Shipment.DriverName is not null && (Model.Shipment.Status == "asignada" || Model.Shipment.Status == "confirmada"))
+            {
+                <form method="post" asp-page-handler="StartDelivery" asp-route-id="@Model.Id" class="mt-3">
+                    <button class="btn btn-primary w-100" type="submit">Iniciar entrega · pasar a En ruta</button>
+                </form>
+            }
+        </div></div>
+
+        @if (Model.Proof is not null)
+        {
+            <div class="card shadow-sm mb-4"><div class="card-header fw-semibold">Proof of Delivery</div><div class="card-body"><p class="mb-1"><strong>@Model.Proof.ReceivedBy</strong> @(string.IsNullOrWhiteSpace(Model.Proof.Relationship) ? "" : $"({Model.Proof.Relationship})")</p><small class="text-muted">@Model.Proof.DeliveredAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small><p class="mt-3 mb-0">@Model.Proof.Notes</p></div></div>
+        }
+        else
+        {
+            <div class="card shadow-sm mb-4"><div class="card-header fw-semibold">Registrar entrega</div><div class="card-body"><form method="post" asp-page-handler="Deliver" asp-route-id="@Model.Id"><div class="mb-3"><label asp-for="Pod.ReceivedByName" class="form-label">Recibido por *</label><input asp-for="Pod.ReceivedByName" class="form-control" /></div><div class="mb-3"><label asp-for="Pod.Relationship" class="form-label">Relación</label><input asp-for="Pod.Relationship" class="form-control" placeholder="Titular, familiar, recepción..." /></div><div class="mb-3"><label asp-for="Pod.DriverId" class="form-label">Conductor</label><select asp-for="Pod.DriverId" class="form-select"><option value="">Usar conductor asignado</option>@foreach (var driver in Model.Drivers) { <option value="@driver.Id">@driver.Name</option> }</select></div><div class="mb-3"><label asp-for="Pod.DeliveryNotes" class="form-label">Notas</label><textarea asp-for="Pod.DeliveryNotes" class="form-control" rows="2"></textarea></div><button class="btn btn-success w-100" type="submit">Confirmar entrega</button></form></div></div>
+            <div class="card shadow-sm"><div class="card-header fw-semibold">Registrar intento fallido</div><div class="card-body"><form method="post" asp-page-handler="Attempt" asp-route-id="@Model.Id"><div class="mb-3"><label asp-for="Attempt.ResultCode" class="form-label">Motivo *</label><select asp-for="Attempt.ResultCode" class="form-select"><option value="cliente_ausente">Cliente ausente</option><option value="direccion_incorrecta">Dirección incorrecta</option><option value="negocio_cerrado">Negocio cerrado</option><option value="cliente_rechazo">Cliente rechazó</option><option value="sin_acceso">Sin acceso</option><option value="paquete_danado">Paquete dañado</option><option value="otro">Otro</option></select></div><div class="mb-3"><label asp-for="Attempt.DriverId" class="form-label">Conductor</label><select asp-for="Attempt.DriverId" class="form-select"><option value="">Usar conductor asignado</option>@foreach (var driver in Model.Drivers) { <option value="@driver.Id">@driver.Name</option> }</select></div><div class="mb-3"><label asp-for="Attempt.NextAction" class="form-label">Próxima acción</label><select asp-for="Attempt.NextAction" class="form-select"><option value="reintentar">Reintentar</option><option value="retener">Retener</option><option value="devolver">Devolver</option></select></div><div class="mb-3"><label asp-for="Attempt.Notes" class="form-label">Notas</label><textarea asp-for="Attempt.Notes" class="form-control" rows="2"></textarea></div><button class="btn btn-outline-warning w-100" type="submit">Registrar intento</button></form></div></div>
+        }
+    </div>
+</div>

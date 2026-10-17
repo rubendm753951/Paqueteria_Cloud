@@ -25,8 +25,10 @@ namespace Paqueteria.Web.Pages
 
         public bool CanViewProducts { get; private set; }
 
+        public bool CanViewShipments { get; private set; }
+
         public int AvailableModuleCount => (CanViewAgencies ? 1 : 0) +
-            (CanCreateOrders ? 1 : 0) + (CanViewProducts ? 1 : 0);
+            (CanCreateOrders ? 1 : 0) + (CanViewProducts ? 1 : 0) + (CanViewShipments ? 1 : 0);
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -47,6 +49,10 @@ namespace Paqueteria.Web.Pages
             CanViewProducts = await _context.UserPagePermissions
                 .AnyAsync(permission => permission.UserId == userId &&
                     permission.PageKey == "Productos" && permission.CanView);
+
+            CanViewShipments = await _context.UserPagePermissions
+                .AnyAsync(permission => permission.UserId == userId &&
+                    permission.PageKey == "Envios" && permission.CanView);
 
             if (CanViewAgencies)
             {
