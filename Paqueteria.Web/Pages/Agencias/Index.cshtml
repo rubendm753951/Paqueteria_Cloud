@@ -2,191 +2,65 @@
 @model Paqueteria.Web.Pages.Agencias.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Agencias";
 }
 
-<h1>Index</h1>
+<section class="agency-list-page">
+    <header class="agency-list-heading">
+        <div>
+            <p class="agency-kicker">SIEXPRO / CATÁLOGOS</p>
+            <h1>Agencias</h1>
+            <p>Consulta las agencias habilitadas para tu cuenta.</p>
+        </div>
+        <div class="agency-heading-actions">
+            @if (Model.CanManageProductAssignments)
+            {
+                <a asp-page="/Productos/Tarifario" class="agency-secondary-link">Asignar productos <span aria-hidden="true">&rarr;</span></a>
+            }
+            @if (Model.CanCreateAgency || Model.EditableAgencyIds.Count > 0)
+            {
+                <a asp-page="./Create" class="agency-primary-link">Administrar agencias <span aria-hidden="true">&rarr;</span></a>
+            }
+        </div>
+    </header>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].Direccion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].EstadoProvincia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].Ciudad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].Telefono)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].FechaAlta)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].FechaTermino)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].LimiteCredito)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].Nit)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].RequiereAsignacion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].Factor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].EsquemaPorFactor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].CostoAdicional)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].GuiaEstafeta)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].Noexterior)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].Colonia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].Municipio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].CodigoPostal)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].Rfc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].TipoDePago)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].PeRemitente)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].FedexRemitente)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].IdCorporativoNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].IdMonedaNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].IdPaisNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CAgencia[0].IdReciboNavigation)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.CAgencia) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Direccion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EstadoProvincia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ciudad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaAlta)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaTermino)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LimiteCredito)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RequiereAsignacion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Factor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EsquemaPorFactor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CostoAdicional)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GuiaEstafeta)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Noexterior)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Colonia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Municipio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CodigoPostal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rfc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoDePago)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PeRemitente)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FedexRemitente)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdCorporativoNavigation.IdCorporativo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdMonedaNavigation.IdMoneda)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdPaisNavigation.IdPais)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdReciboNavigation.IdRecibo)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.IdAgencia">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.IdAgencia">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.IdAgencia">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="agency-list-meta">
+        <span>@Model.CAgencia.Count @(Model.CAgencia.Count == 1 ? "agencia disponible" : "agencias disponibles")</span>
+    </div>
+
+    <div class="agency-table-wrap">
+        <table class="agency-table">
+            <thead>
+                <tr><th>Agencia</th><th>Ubicación</th><th>Corporativo</th><th>Moneda</th><th>País</th><th>Contacto</th><th></th></tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.CAgencia)
+            {
+                <tr>
+                    <td><strong>@item.Nombre</strong><small>ID @item.IdAgencia</small></td>
+                    <td>@item.Ciudad, @item.EstadoProvincia<small>@item.CodigoPostal · @item.Colonia</small></td>
+                    <td>@item.IdCorporativoNavigation.Nombre<small>ID @item.IdCorporativo</small></td>
+                    <td>@item.IdMonedaNavigation.Nombre<small>@item.IdMonedaNavigation.Abreviatura</small></td>
+                    <td>@item.IdPaisNavigation.Nombre<small>ID @item.IdPais</small></td>
+                    <td>@item.Telefono<small>@item.Email</small></td>
+                    <td class="agency-row-actions">
+                        <a asp-page="./Details" asp-route-id="@item.IdAgencia">Ver</a>
+                        @if (Model.EditableAgencyIds.Contains(item.IdAgencia))
+                        {
+                            <a asp-page="./Create" asp-route-agencyId="@item.IdAgencia">Editar</a>
+                        }
+                        @if (Model.DeletableAgencyIds.Contains(item.IdAgencia))
+                        {
+                            <a asp-page="./Delete" asp-route-id="@item.IdAgencia" class="agency-delete-link">Dar de baja</a>
+                        }
+                    </td>
+                </tr>
+            }
+            @if (Model.CAgencia.Count == 0)
+            {
+                <tr><td colspan="7" class="agency-empty">No hay agencias asignadas a tu cuenta.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

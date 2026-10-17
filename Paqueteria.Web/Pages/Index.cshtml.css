@@ -1,0 +1,204 @@
+.workspace-home {
+    --workspace-ink: #20312f;
+    --workspace-muted: #667572;
+    --workspace-line: #d7e1dd;
+    --workspace-accent: #147d70;
+    max-width: 1080px;
+    margin: 2rem auto 4rem;
+    color: var(--workspace-ink);
+    animation: workspace-arrive 420ms ease-out both;
+}
+
+.workspace-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1.5rem 0 2rem;
+    border-bottom: 1px solid var(--workspace-line);
+}
+
+.workspace-eyebrow {
+    margin: 0 0 .5rem;
+    color: var(--workspace-accent);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+}
+
+.workspace-heading h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 650;
+}
+
+.workspace-intro {
+    margin: .5rem 0 0;
+    color: var(--workspace-muted);
+}
+
+.workspace-intro span {
+    padding: 0 .35rem;
+    color: var(--workspace-accent);
+}
+
+.workspace-date {
+    padding: .45rem .65rem;
+    border: 1px solid var(--workspace-line);
+    color: var(--workspace-muted);
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .07em;
+}
+
+.workspace-section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 2rem 0 1rem;
+}
+
+.workspace-section-heading .workspace-eyebrow {
+    margin-bottom: .2rem;
+}
+
+.workspace-section-heading h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 650;
+}
+
+.workspace-count {
+    color: var(--workspace-muted);
+    font-size: .9rem;
+}
+
+.workspace-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 1rem;
+}
+
+.workspace-page {
+    display: flex;
+    min-height: 230px;
+    flex-direction: column;
+    padding: 1.25rem;
+    border: 1px solid var(--workspace-line);
+    border-top: 3px solid var(--workspace-accent);
+    background: linear-gradient(145deg, #ffffff 0%, #f4f8f6 100%);
+    box-shadow: 0 8px 24px rgb(32 49 47 / 5%);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.workspace-page:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgb(32 49 47 / 9%);
+}
+
+.workspace-page-top,
+.workspace-page-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.workspace-page-mark,
+.workspace-empty-mark {
+    display: grid;
+    width: 2.5rem;
+    aspect-ratio: 1;
+    place-items: center;
+    background: #e3f1ed;
+    color: var(--workspace-accent);
+    font-size: .8rem;
+    font-weight: 750;
+}
+
+.workspace-access-label {
+    color: var(--workspace-accent);
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+}
+
+.workspace-page h3 {
+    margin: 1.35rem 0 .35rem;
+    font-size: 1.2rem;
+    font-weight: 650;
+}
+
+.workspace-page > p {
+    margin: 0 0 1.25rem;
+    color: var(--workspace-muted);
+    line-height: 1.5;
+}
+
+.workspace-page-footer {
+    margin-top: auto;
+    padding-top: .9rem;
+    border-top: 1px solid var(--workspace-line);
+    color: var(--workspace-muted);
+    font-size: .82rem;
+}
+
+.workspace-open-link {
+    color: var(--workspace-accent);
+    font-weight: 650;
+    text-decoration: none;
+}
+
+.workspace-open-link:hover {
+    text-decoration: underline;
+}
+
+.workspace-empty {
+    padding: 2rem;
+    border: 1px dashed var(--workspace-line);
+    background: #f7faf8;
+}
+
+.workspace-empty-mark {
+    margin-bottom: 1rem;
+}
+
+.workspace-empty h3 {
+    margin: 0 0 .4rem;
+    font-size: 1.1rem;
+}
+
+.workspace-empty p {
+    margin: 0;
+    color: var(--workspace-muted);
+}
+
+@keyframes workspace-arrive {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+    .workspace-home {
+        margin-top: .5rem;
+    }
+
+    .workspace-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: .75rem;
+    }
+
+    .workspace-heading h1 {
+        font-size: 1.65rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .workspace-home,
+    .workspace-page {
+        animation: none;
+        transition: none;
+    }
+}

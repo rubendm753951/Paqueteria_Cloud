@@ -24,8 +24,174 @@ public partial class PaqueteriaDbContext : DbContext
 
     public virtual DbSet<CRecibo> CRecibos { get; set; }
 
+    public virtual DbSet<UserPagePermission> UserPagePermissions { get; set; }
+
+    public virtual DbSet<UserAgencyPermission> UserAgencyPermissions { get; set; }
+
+    public virtual DbSet<ProductCatalogItem> Products { get; set; }
+
+    public virtual DbSet<AgencyProduct> AgencyProducts { get; set; }
+
+    public virtual DbSet<AgencyProductRateRange> AgencyProductRateRanges { get; set; }
+
+    public virtual DbSet<ShipmentOrder> ShipmentOrders { get; set; }
+
+    public virtual DbSet<ShipmentAddress> ShipmentAddresses { get; set; }
+
+    public virtual DbSet<ShipmentPackage> ShipmentPackages { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ProductCatalogItem>(entity =>
+        {
+            entity.ToTable("products");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.SkuCodigo).IsUnique();
+            entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+            entity.Property(e => e.SkuCodigo).HasColumnName("sku_codigo").HasMaxLength(50).IsRequired();
+            entity.Property(e => e.Nombre).HasColumnName("nombre").HasMaxLength(160).IsRequired();
+            entity.Property(e => e.Descripcion).HasColumnName("descripcion");
+            entity.Property(e => e.FechaCreacion).HasColumnName("fecha_creacion").HasDefaultValueSql("now()");
+            entity.Property(e => e.FechaBaja).HasColumnName("fecha_baja");
+            entity.Property(e => e.Estado).HasColumnName("estado").HasMaxLength(12).HasDefaultValue("activo");
+        });
+
+        modelBuilder.Entity<AgencyProduct>(entity =>
+        {
+            entity.ToTable("agency_products");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.IdAgencia, e.IdProducto }).IsUnique();
+            entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+            entity.Property(e => e.IdAgencia).HasColumnName("id_agencia");
+            entity.Property(e => e.IdProducto).HasColumnName("id_producto");
+            entity.Property(e => e.Moneda).HasColumnName("moneda").HasColumnType("character(3)");
+            entity.Property(e => e.IncrementoPesoKg).HasColumnName("incremento_peso_kg").HasPrecision(9, 3).HasDefaultValue(1m);
+            entity.Property(e => e.CoberturaExtendidaPrecio).HasColumnName("cobertura_extendida_precio").HasPrecision(12, 2);
+            entity.Property(e => e.CargoDimensionesExtrasPrecio).HasColumnName("cargo_dimensiones_extras_precio").HasPrecision(12, 2);
+            entity.Property(e => e.LadoMaximoCm).HasColumnName("lado_maximo_cm").HasPrecision(8, 2).HasDefaultValue(120m);
+            entity.Property(e => e.SumaLadosMaximaCm).HasColumnName("suma_lados_maxima_cm").HasPrecision(8, 2);
+            entity.Property(e => e.Activo).HasColumnName("activo").HasDefaultValue(true);
+            entity.Property(e => e.FechaCreacion).HasColumnName("fecha_creacion").HasDefaultValueSql("now()");
+        });
+
+        modelBuilder.Entity<AgencyProductRateRange>(entity =>
+        {
+            entity.ToTable("agency_product_rate_ranges");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.IdAgenciaProducto, e.PesoInicialKg });
+            entity.Property(e => e.Id).HasColumnName("id").UseIdentityAlwaysColumn();
+            entity.Property(e => e.IdAgenciaProducto).HasColumnName("id_agencia_producto");
+            entity.Property(e => e.PesoInicialKg).HasColumnName("peso_inicial_kg").HasPrecision(9, 3);
+            entity.Property(e => e.PesoFinalKg).HasColumnName("peso_final_kg").HasPrecision(9, 3);
+            entity.Property(e => e.PrecioBaseRango).HasColumnName("precio_base_rango").HasPrecision(12, 2);
+            entity.Property(e => e.PrecioKgAdicional).HasColumnName("precio_kg_adicional").HasPrecision(12, 2);
+        });
+
+        modelBuilder.Entity<ShipmentOrder>(entity =>
+        {
+            entity.ToTable("shipment_orders");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.TrackingNumber).IsUnique();
+            entity.HasIndex(e => new { e.IdAgencia, e.FechaCreacion });
+            entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+            entity.Property(e => e.TrackingNumber).HasColumnName("tracking_number").HasMaxLength(40).IsRequired();
+            entity.Property(e => e.IdAgencia).HasColumnName("id_agencia");
+            entity.Property(e => e.IdProducto).HasColumnName("id_producto");
+            entity.Property(e => e.IdAgenciaProducto).HasColumnName("id_agencia_producto");
+            entity.Property(e => e.FechaCreacion).HasColumnName("fecha_creacion").HasDefaultValueSql("now()");
+            entity.Property(e => e.EstadoOrden).HasColumnName("estado_orden").HasMaxLength(16).HasDefaultValue("cotizada");
+            entity.Property(e => e.CoberturaExtendida).HasColumnName("cobertura_extendida");
+            entity.Property(e => e.CoberturaExtendidaPrecioSnapshot).HasColumnName("cobertura_extendida_precio_snapshot").HasPrecision(12, 2);
+            entity.Property(e => e.TotalEnvio).HasColumnName("total_envio").HasPrecision(12, 2);
+            entity.Property(e => e.Moneda).HasColumnName("moneda").HasColumnType("character(3)");
+            entity.Property(e => e.CreadaPorUserId).HasColumnName("creada_por_user_id");
+        });
+
+        modelBuilder.Entity<ShipmentAddress>(entity =>
+        {
+            entity.ToTable("shipment_addresses");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.IdOrden, e.TipoContacto }).IsUnique();
+            entity.Property(e => e.Id).HasColumnName("id").UseIdentityAlwaysColumn();
+            entity.Property(e => e.IdOrden).HasColumnName("id_orden");
+            entity.Property(e => e.TipoContacto).HasColumnName("tipo_contacto").HasMaxLength(12);
+            entity.Property(e => e.Pais).HasColumnName("pais").HasColumnType("character(2)");
+            entity.Property(e => e.NombreContacto).HasColumnName("nombre_contacto").HasMaxLength(160);
+            entity.Property(e => e.Empresa).HasColumnName("empresa").HasMaxLength(160);
+            entity.Property(e => e.DireccionLinea1).HasColumnName("direccion_linea1").HasMaxLength(200);
+            entity.Property(e => e.DireccionLinea2).HasColumnName("direccion_linea2").HasMaxLength(200);
+            entity.Property(e => e.CodigoPostal).HasColumnName("codigo_postal").HasMaxLength(12);
+            entity.Property(e => e.Colonia).HasColumnName("colonia").HasMaxLength(120);
+            entity.Property(e => e.Municipio).HasColumnName("municipio").HasMaxLength(120);
+            entity.Property(e => e.Estado).HasColumnName("estado").HasMaxLength(120);
+            entity.Property(e => e.Ciudad).HasColumnName("ciudad").HasMaxLength(120);
+            entity.Property(e => e.Telefono).HasColumnName("telefono").HasMaxLength(30);
+            entity.Property(e => e.Email).HasColumnName("email").HasMaxLength(254);
+            entity.Property(e => e.TaxIdRfc).HasColumnName("tax_id_rfc").HasMaxLength(20);
+        });
+
+        modelBuilder.Entity<ShipmentAddress>()
+            .HasOne<ShipmentOrder>()
+            .WithMany()
+            .HasForeignKey(address => address.IdOrden)
+            .OnDelete(DeleteBehavior.Cascade)
+            .HasConstraintName("fk_shipment_addresses_order");
+
+        modelBuilder.Entity<ShipmentPackage>(entity =>
+        {
+            entity.ToTable("shipment_packages");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.IdOrden, e.SecuenciaPaquete }).IsUnique();
+            entity.Property(e => e.Id).HasColumnName("id").UseIdentityAlwaysColumn();
+            entity.Property(e => e.IdOrden).HasColumnName("id_orden");
+            entity.Property(e => e.SecuenciaPaquete).HasColumnName("secuencia_paquete");
+            entity.Property(e => e.PesoBasculaKg).HasColumnName("peso_bascula_kg").HasPrecision(9, 3);
+            entity.Property(e => e.PesoVolumetricoKg).HasColumnName("peso_volumetrico_kg").HasPrecision(9, 3);
+            entity.Property(e => e.PesoCobrableKg).HasColumnName("peso_cobrable_kg").HasPrecision(9, 3);
+            entity.Property(e => e.LargoCm).HasColumnName("largo_cm").HasPrecision(8, 2);
+            entity.Property(e => e.AnchoCm).HasColumnName("ancho_cm").HasPrecision(8, 2);
+            entity.Property(e => e.AltoCm).HasColumnName("alto_cm").HasPrecision(8, 2);
+            entity.Property(e => e.DescripcionContenido).HasColumnName("descripcion_contenido").HasMaxLength(240);
+            entity.Property(e => e.EsDimensionExtra).HasColumnName("es_dimension_extra");
+            entity.Property(e => e.TarifaBaseSnapshot).HasColumnName("tarifa_base_snapshot").HasPrecision(12, 2);
+            entity.Property(e => e.CargoKgAdicionalSnapshot).HasColumnName("cargo_kg_adicional_snapshot").HasPrecision(12, 2);
+            entity.Property(e => e.CargoDimensionExtraSnapshot).HasColumnName("cargo_dimension_extra_snapshot").HasPrecision(12, 2);
+            entity.Property(e => e.TotalPaqueteSnapshot).HasColumnName("total_paquete_snapshot").HasPrecision(12, 2);
+        });
+
+        modelBuilder.Entity<ShipmentPackage>()
+            .HasOne<ShipmentOrder>()
+            .WithMany()
+            .HasForeignKey(package => package.IdOrden)
+            .OnDelete(DeleteBehavior.Cascade)
+            .HasConstraintName("fk_shipment_packages_order");
+
+        modelBuilder.Entity<UserPagePermission>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.PageKey })
+                .HasName("pk_user_page_permissions");
+            entity.ToTable("user_page_permissions");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.PageKey).HasColumnName("page_key");
+            entity.Property(e => e.CanView).HasColumnName("can_view");
+            entity.Property(e => e.CanCreate).HasColumnName("can_create");
+            entity.Property(e => e.CanEdit).HasColumnName("can_edit");
+            entity.Property(e => e.CanDelete).HasColumnName("can_delete");
+        });
+
+        modelBuilder.Entity<UserAgencyPermission>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.AgencyId })
+                .HasName("pk_user_agency_permissions");
+            entity.ToTable("user_agency_permissions");
+            entity.HasIndex(e => e.AgencyId, "ix_user_agency_permissions_agency_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.AgencyId).HasColumnName("agency_id");
+            entity.Property(e => e.CanView).HasColumnName("can_view");
+            entity.Property(e => e.CanEdit).HasColumnName("can_edit");
+            entity.Property(e => e.CanDelete).HasColumnName("can_delete");
+        });
+
         modelBuilder.Entity<CAgencia>(entity =>
         {
             entity.HasKey(e => e.IdAgencia).HasName("pk_c_agencias");
