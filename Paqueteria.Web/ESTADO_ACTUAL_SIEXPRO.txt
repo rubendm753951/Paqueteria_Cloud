@@ -1,0 +1,61 @@
+SIEXPRO - ESTADO ACTUAL DEL PROYECTO
+Fecha: 2026-10-10
+
+1. RESUMEN EJECUTIVO
+SiExPro es una aplicacion ASP.NET Core Razor Pages sobre .NET 10. Usa PostgreSQL/Aurora RDS para Identity y datos de paqueteria, y esta desplegada en una instancia Ubuntu de AWS Lightsail. El esquema inicial de productos, tarifas y ordenes ya fue ejecutado y el usuario confirmo que consulta seis tablas nuevas. El codigo actual agrega catalogo, tarifario y captura de orden con confirmacion de cotizacion antes de persistirla.
+
+2. TECNOLOGIA Y ENTORNO
+- ASP.NET Core Razor Pages / .NET 10.
+- Entity Framework Core y Npgsql.
+- Aurora PostgreSQL 18.3, base paqueteriadbdev, region us-west-2.
+- Identidad/autenticacion con ASP.NET Core Identity en tablas AspNetUsers y relacionadas.
+- App publica en Lightsail mediante systemd y Nginx/HTTPS.
+- URL publica: https://paqueteria.usapack.com.mx
+- URL local prevista: http://localhost:5090/
+- La conexion local requiere ConnectionStrings__DefaultConnection con credenciales vigentes y Root Certificate apuntando al global-bundle.pem de AWS. No guardar contrasenas en el repositorio.
+
+3. FUNCIONALIDAD IMPLEMENTADA
+- Home branded SiExPro, con modulos segun permisos.
+- Login Identity personalizado.
+- Agencias: listado filtrado por permisos, alta/edicion vertical unificada, selector para cargar agencia existente, y listas de corporativo, moneda, pais y recibo con nombre e ID.
+- Productos: catalogo con busqueda, paginacion, alta, edicion y baja logica.
+- Tarifario: asignacion de producto a varias agencias autorizadas, rangos de peso contiguos, incremento de cobro y cargos/limites dimensionales.
+- Order Entry: contactos de remitente/destinatario y de 1 a 10 paquetes.
+- Flujo de orden actualizado: Cotizar muestra un desglose; Aceptar guarda orden/direcciones/paquetes en transaccion; Rechazar restaura los datos y no guarda la orden.
+- La cotizacion pendiente se guarda temporalmente en memoria, pertenece al usuario, expira a los 10 minutos y solo puede aceptarse una vez. Un reinicio invalida cotizaciones pendientes.
+- Precio por paquete usa max(peso bascula, peso volumetrico), con peso volumetrico = largo x ancho x alto / 5000 y redondeo al incremento del servicio.
+
+4. BASE DE DATOS
+Scripts del proyecto:
+- Data/Scripts/001_products_orders.sql: crea products, agency_products, agency_product_rate_ranges, shipment_orders, shipment_addresses y shipment_packages.
+- Data/Scripts/002_seed_logistics_permissions.sql: grants de paginas/agencias para un usuario.
+
+El usuario confirmo que una consulta de information_schema devolvio las seis tablas del modulo. No se confirmo una prueba final completa de INSERT de tarifario y orden con todas las restricciones.
+
+5. PERMISOS
+Se usan user_page_permissions y user_agency_permissions. Se requiere permiso de pagina y, cuando corresponde, permiso por agencia. Para que aparezca y funcione el editor de agencias, verificar para el usuario:
+- user_page_permissions: Agencias can_view=true, can_create=true y can_edit=true.
+- user_agency_permissions: can_view=true y can_edit=true para cada agencia que administrara.
+Para Order Entry se requiere Ordenes can_view=true/can_create=true, permiso Agencias can_view=true, y grants user_agency_permissions can_view=true para las agencias seleccionables.
+Para asignar productos/tarifas se requiere Productos can_view=true/can_edit=true y user_agency_permissions can_edit=true para las agencias autorizadas.
+El UPDATE de permiso de pagina Agencias aparece agregado al archivo SQL local, pero se debe verificar que se haya ejecutado en Aurora y confirmar su salida RETURNING.
+
+6. VERIFICACION RECIENTE
+- dotnet build -c Release: correcto despues de implementar el flujo de cotizacion y sus cambios recientes.
+- Dos advertencias conocidas NU1901 para NuGet.Packaging y NuGet.Protocol version 6.12.1 (GHSA-g4vj-cjjj-v7hg).
+- Errores del editor: no reporto errores en las vistas/modelos comprobados.
+- No se ejecuto una prueba automatizada ni una prueba end-to-end final de crear, rechazar y aceptar una orden contra Aurora.
+
+7. ESTADO DE DESPLIEGUE
+Lightsail tuvo el servicio paqueteria activo y el login publico respondio HTTP 200 en la ultima verificacion de despliegue. Los cambios mas recientes de interfaz de Agencias y el flujo de cotizacion de Order Entry se hicieron despues de ese despliegue; no hay confirmacion de que ya esten publicados en Lightsail.
+El ultimo paquete Linux conocido esta en publish/Paqueteria.Web-linux-x64.zip, pero debe regenerarse despues de los cambios mas recientes antes de volver a transferirlo.
+
+8. SIGUIENTES PASOS RECOMENDADOS
+1. Confirmar los permisos page-level y agency-level indicados arriba en Aurora.
+2. Configurar la conexion local con la contrasena actual y el certificado RDS; iniciar dotnet run desde la carpeta del proyecto.
+3. Probar Productos: crear un producto y verificar que aparezca en products.
+4. Probar Tarifario: asignarlo a una agencia, usar rangos contiguos (el siguiente Desde coincide con el Hasta previo; el ultimo Hasta queda vacio) y verificar agency_products/agency_product_rate_ranges.
+5. Probar Order Entry: cotizar, rechazar y confirmar. Verificar que rechazar no inserte filas y aceptar inserte shipment_orders, dos shipment_addresses y los shipment_packages correspondientes.
+6. Antes de publicar, respaldar Aurora. Generar de nuevo el paquete Linux, subirlo a Lightsail y reiniciar systemd. Mantener el secreto en /etc/paqueteria/paqueteria.env y no cambiarlo al reemplazar los archivos publicados.
+
+FIN DEL ESTADO

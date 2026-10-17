@@ -1,0 +1,18 @@
+@page
+@model Paqueteria.Web.Pages.Rastreo.ConfirmarModel
+@{ ViewData["Title"] = "Confirmar seguimiento"; }
+<section class="tracking-public tracking-result">
+    @if (!Model.IsValid)
+    {
+        <h1>Enlace no válido</h1><p>El enlace de confirmación no existe o la suscripción fue cancelada.</p>
+    }
+    else if (Model.AlreadyConfirmed)
+    {
+        <h1>Suscripción confirmada</h1><p>Este correo ya recibe actualizaciones del envío <strong>@Model.TrackingNumber</strong>.</p>
+    }
+    else
+    {
+        <h1>Suscripción confirmada</h1><p>Recibirás actualizaciones del envío <strong>@Model.TrackingNumber</strong>.</p>
+    }
+    <a asp-page="/Rastreo/Index">Volver al rastreo</a>
+</section>

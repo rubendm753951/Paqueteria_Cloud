@@ -1,0 +1,73 @@
+@page
+@model Paqueteria.Web.Areas.Identity.Pages.Account.LoginModel
+@{
+    Layout = "/Pages/Shared/_AuthLayout.cshtml";
+    ViewData["Title"] = "Iniciar sesión";
+}
+
+<main class="signin-shell">
+    <aside class="signin-brand-panel">
+        <a class="signin-brand" asp-area="" asp-page="/Index" aria-label="SiExPro, inicio">
+            <span class="signin-brand-symbol">S</span>
+            <span class="signin-brand-name">SiExPro</span>
+        </a>
+        <div class="signin-brand-copy">
+            <p class="signin-kicker">SISTEMA EXPRESS</p>
+            <h1>Tu operación,<br />en movimiento.</h1>
+            <p>Accede a las herramientas de gestión de paquetería de tu organización.</p>
+        </div>
+        <div class="signin-brand-foot">
+            <span class="signin-foot-rule"></span>
+            <span>GESTIÓN · CONTROL · SERVICIO</span>
+        </div>
+    </aside>
+
+    <section class="signin-content">
+        <div class="signin-panel">
+            <p class="signin-form-kicker">ACCESO SEGURO</p>
+            <h2>Iniciar sesión</h2>
+            <p class="signin-lead">Ingresa con tu cuenta registrada.</p>
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="signin-alert" role="alert">@Model.ErrorMessage</div>
+            }
+
+            <form method="post" asp-route-returnUrl="@Model.ReturnUrl" class="signin-form">
+                <div asp-validation-summary="ModelOnly" class="signin-validation" role="alert"></div>
+
+                <div class="signin-field">
+                    <label asp-for="Input.Email">Correo electrónico</label>
+                    <input asp-for="Input.Email" autocomplete="username" inputmode="email" placeholder="nombre@empresa.com" />
+                    <span asp-validation-for="Input.Email" class="signin-validation"></span>
+                </div>
+
+                <div class="signin-field">
+                    <label asp-for="Input.Password">Contraseña</label>
+                    <input asp-for="Input.Password" autocomplete="current-password" placeholder="Ingresa tu contraseña" />
+                    <span asp-validation-for="Input.Password" class="signin-validation"></span>
+                </div>
+
+                <label class="signin-remember">
+                    <input asp-for="Input.RememberMe" />
+                    <span>Mantener sesión iniciada</span>
+                </label>
+
+                <button type="submit" class="signin-submit">
+                    Entrar a SiExPro <span aria-hidden="true">&rarr;</span>
+                </button>
+            </form>
+
+            <div class="signin-register">
+                <span>¿Aún no tienes cuenta?</span>
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Crear cuenta</a>
+            </div>
+            <p class="signin-help">¿Problemas para acceder? Contacta al administrador de tu organización.</p>
+        </div>
+        <footer class="signin-legal">SiExPro <span>·</span> Sistema Express</footer>
+    </section>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

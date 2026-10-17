@@ -1,0 +1,83 @@
+@page
+@model Paqueteria.Web.Pages.Envios.IndexModel
+@{
+    ViewData["Title"] = "Envíos";
+    string StatusLabel(string status) => status switch
+    {
+        "asignada" => "Asignada",
+        "en_transito" => "En ruta",
+        "intento_fallido" => "Intento fallido",
+        "en_retencion" => "En retención",
+        "entregada" => "Entregada",
+        "cancelada" => "Cancelada",
+        "devuelta" => "Devuelta",
+        "confirmada" => "Confirmada",
+        _ => status
+    };
+    string StatusClass(string status) => status switch
+    {
+        "entregada" => "text-bg-success",
+        "en_transito" or "asignada" => "text-bg-primary",
+        "intento_fallido" or "en_retencion" => "text-bg-warning",
+        "cancelada" or "devuelta" => "text-bg-danger",
+        _ => "text-bg-secondary"
+    };
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <p class="text-uppercase text-muted small mb-1">Operaciones</p>
+        <h1 class="mb-1">Seguimiento de envíos</h1>
+        <p class="text-muted mb-0">Controla el estado, la asignación y la entrega por agencia.</p>
+    </div>
+    <a asp-page="/Ordenes/Create" class="btn btn-primary">Nueva orden</a>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+{
+    <div class="alert alert-success">@Model.StatusMessage</div>
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3"><div class="card shadow-sm"><div class="card-body"><small class="text-muted">Envíos filtrados</small><div class="fs-3 fw-semibold">@Model.Total</div></div></div></div>
+    <div class="col-md-3"><div class="card shadow-sm"><div class="card-body"><small class="text-muted">Asignados / en ruta</small><div class="fs-3 fw-semibold text-primary">@Model.InTransit</div></div></div></div>
+    <div class="col-md-3"><div class="card shadow-sm"><div class="card-body"><small class="text-muted">Entregados</small><div class="fs-3 fw-semibold text-success">@Model.Delivered</div></div></div></div>
+    <div class="col-md-3"><div class="card shadow-sm"><div class="card-body"><small class="text-muted">Incidencias</small><div class="fs-3 fw-semibold text-warning">@Model.Incidents</div></div></div></div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-2 align-items-end">
+            <div class="col-md-3"><label asp-for="Tracking" class="form-label">Tracking</label><input asp-for="Tracking" class="form-control" placeholder="SXP..." /></div>
+            <div class="col-md-2"><label asp-for="AgencyId" class="form-label">Agencia</label><select asp-for="AgencyId" class="form-select"><option value="">Todas</option>@foreach (var item in Model.Agencies) { <option value="@item.Id">@item.Name</option> }</select></div>
+            <div class="col-md-2"><label asp-for="Status" class="form-label">Estado</label><select asp-for="Status" class="form-select"><option value="">Todos</option><option value="confirmada">Confirmada</option><option value="asignada">Asignada</option><option value="en_transito">En ruta</option><option value="intento_fallido">Intento fallido</option><option value="entregada">Entregada</option><option value="cancelada">Cancelada</option></select></div>
+            <div class="col-md-2"><label asp-for="DriverId" class="form-label">Conductor</label><select asp-for="DriverId" class="form-select"><option value="">Todos</option>@foreach (var item in Model.Drivers) { <option value="@item.Id">@item.Name</option> }</select></div>
+            <div class="col-md-3 d-flex gap-2"><button class="btn btn-outline-primary" type="submit">Filtrar</button><a asp-page="./Index" class="btn btn-outline-secondary">Limpiar</a></div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead><tr><th>Tracking</th><th>Agencia</th><th>Estado</th><th>Conductor</th><th>Creado</th><th class="text-end">Acciones</th></tr></thead>
+            <tbody>
+            @if (Model.Shipments.Count == 0)
+            {
+                <tr><td colspan="6" class="text-center text-muted py-5">No hay envíos que coincidan con los filtros.</td></tr>
+            }
+            @foreach (var shipment in Model.Shipments)
+            {
+                <tr>
+                    <td><a asp-page="./Details" asp-route-id="@shipment.Id" class="fw-semibold text-decoration-none">@shipment.Tracking</a></td>
+                    <td>@shipment.AgencyName</td>
+                    <td><span class="badge @StatusClass(shipment.Status)">@StatusLabel(shipment.Status)</span></td>
+                    <td>@(shipment.DriverName ?? "Sin asignar")</td>
+                    <td>@shipment.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                    <td class="text-end"><a asp-page="./Details" asp-route-id="@shipment.Id" class="btn btn-sm btn-outline-secondary">Ver detalle</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,139 @@
+@page
+@model Paqueteria.Web.Pages.Productos.TarifarioModel
+@{
+    ViewData["Title"] = "Tarifario por agencia";
+}
+
+<section class="tariff-page">
+    <header class="tariff-heading">
+        <div>
+            <p class="tariff-kicker">SIEXPRO / CONFIGURACIÓN</p>
+            <h1>Asignación y tarifario</h1>
+            <p>Aplica un producto y sus reglas de precio a las agencias autorizadas.</p>
+        </div>
+        <a asp-page="./Index" class="tariff-back">Catálogo de productos</a>
+    </header>
+
+    @if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+    {
+        <div class="tariff-success" role="status">@Model.SuccessMessage</div>
+    }
+
+    <form method="post" id="tariff-form" class="tariff-form">
+        <div asp-validation-summary="All" class="tariff-validation" role="alert"></div>
+
+        <section class="tariff-section">
+            <div class="tariff-section-title"><span>01</span><div><p class="tariff-kicker">SERVICIO</p><h2>Producto y agencias</h2></div></div>
+            <div class="tariff-product-fields">
+                <label class="tariff-field">Producto maestro
+                    <select asp-for="Input.ProductId">
+                        <option value="">Selecciona un producto</option>
+                        @foreach (var product in Model.Products)
+                        {
+                            <option value="@product.Id">@product.Name · @product.Sku</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Input.ProductId"></span>
+                </label>
+                <div class="tariff-field agency-picker">
+                    <span class="agency-picker-label">Agencias asignables</span>
+                    <p>Solo aparecen agencias que puedes administrar.</p>
+                    <div class="agency-options">
+                        @foreach (var agency in Model.Agencies)
+                        {
+                            <label class="agency-option">
+                                <input type="checkbox" name="Input.SelectedAgencyIds" value="@agency.Id" checked="@(Model.Input.SelectedAgencyIds.Contains(agency.Id) ? "checked" : null)" />
+                                <span>@agency.Name</span>
+                            </label>
+                        }
+                        @if (Model.Agencies.Count == 0)
+                        {
+                            <p class="agency-empty">No tienes permiso de edición sobre agencias.</p>
+                        }
+                    </div>
+                    <span asp-validation-for="Input.SelectedAgencyIds"></span>
+                </div>
+            </div>
+        </section>
+
+        <section class="tariff-section">
+            <div class="tariff-section-title"><span>02</span><div><p class="tariff-kicker">MATRIZ DE PESO</p><h2>Rangos de tarifa</h2></div></div>
+            <div class="tariff-table-wrap">
+                <table class="tariff-table">
+                    <thead><tr><th>Desde (kg)</th><th>Hasta (kg, exclusivo)</th><th>Precio base</th><th>Precio por kg adicional</th><th></th></tr></thead>
+                    <tbody id="rate-rows">
+                        @for (var index = 0; index < Model.Input.Ranges.Count; index++)
+                        {
+                            <tr class="rate-row">
+                                <td><input name="Input.Ranges[@index].StartKg" type="number" min="0" step="0.001" value="@Model.Input.Ranges[index].StartKg" required aria-label="Peso inicial del rango @(@index + 1)" /></td>
+                                <td><input name="Input.Ranges[@index].EndKg" type="number" min="0.001" step="0.001" value="@Model.Input.Ranges[index].EndKg" aria-label="Peso final del rango @(@index + 1)" placeholder="Sin límite" /></td>
+                                <td><input name="Input.Ranges[@index].BasePrice" type="number" min="0" step="0.01" value="@Model.Input.Ranges[index].BasePrice" required aria-label="Precio base del rango @(@index + 1)" /></td>
+                                <td><input name="Input.Ranges[@index].AdditionalKgPrice" type="number" min="0" step="0.01" value="@Model.Input.Ranges[index].AdditionalKgPrice" required aria-label="Precio por kg adicional del rango @(@index + 1)" /></td>
+                                <td><button type="button" class="rate-remove" aria-label="Eliminar rango">Quitar</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="tariff-table-actions"><button type="button" id="add-rate" class="tariff-secondary">+ Agregar rango</button><p>Los rangos son [Desde, Hasta): el siguiente inicia donde termina el anterior. Ejemplo: 0–5 y 5–∞. Deja vacío el Hasta del último rango.</p></div>
+            <span asp-validation-for="Input.Ranges" class="tariff-validation" role="alert"></span>
+            <div class="tariff-field tariff-increment"><label asp-for="Input.WeightIncrementKg">Incremento de cobro (kg)</label><input asp-for="Input.WeightIncrementKg" type="number" min="0.001" step="0.001" /><span asp-validation-for="Input.WeightIncrementKg"></span></div>
+        </section>
+
+        <section class="tariff-section">
+            <div class="tariff-section-title"><span>03</span><div><p class="tariff-kicker">CARGOS Y LÍMITES</p><h2>Reglas adicionales</h2></div></div>
+            <div class="tariff-charge-grid">
+                <label class="tariff-field">Cobertura extendida<input asp-for="Input.ExtendedCoveragePrice" type="number" min="0" step="0.01" /></label>
+                <label class="tariff-field">Cargo dimensiones extra<input asp-for="Input.OversizePrice" type="number" min="0" step="0.01" /></label>
+                <label class="tariff-field">Lado máximo (cm)<input asp-for="Input.MaxSideCm" type="number" min="1" step="0.01" /></label>
+                <label class="tariff-field">Suma máxima de lados (cm)<input asp-for="Input.MaxSideSumCm" type="number" min="1" step="0.01" /><small>Deja vacío para no aplicar este límite.</small></label>
+            </div>
+        </section>
+
+        <footer class="tariff-footer"><span>El cambio reemplaza los rangos actuales de este producto para las agencias seleccionadas.</span><button type="submit" class="tariff-submit">Guardar asignación <span aria-hidden="true">&rarr;</span></button></footer>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (() => {
+            const rows = document.getElementById('rate-rows');
+            const addButton = document.getElementById('add-rate');
+
+            function reindex() {
+                [...rows.querySelectorAll('.rate-row')].forEach((row, index) => {
+                    row.querySelectorAll('input').forEach(input => {
+                        input.name = input.name.replace(/Input\.Ranges\[\d+\]/, `Input.Ranges[${index}]`);
+                        input.setAttribute('aria-label', input.getAttribute('aria-label').replace(/rango \d+/, `rango ${index + 1}`));
+                    });
+                    row.querySelector('.rate-remove').disabled = rows.children.length === 1;
+                });
+            }
+
+            addButton.addEventListener('click', () => {
+                const index = rows.children.length;
+                const row = document.createElement('tr');
+                row.className = 'rate-row';
+                row.innerHTML = `
+                    <td><input name="Input.Ranges[${index}].StartKg" type="number" min="0" step="0.001" value="0" required aria-label="Peso inicial del rango ${index + 1}"></td>
+                    <td><input name="Input.Ranges[${index}].EndKg" type="number" min="0.001" step="0.001" aria-label="Peso final del rango ${index + 1}" placeholder="Sin límite"></td>
+                    <td><input name="Input.Ranges[${index}].BasePrice" type="number" min="0" step="0.01" value="0" required aria-label="Precio base del rango ${index + 1}"></td>
+                    <td><input name="Input.Ranges[${index}].AdditionalKgPrice" type="number" min="0" step="0.01" value="0" required aria-label="Precio por kg adicional del rango ${index + 1}"></td>
+                    <td><button type="button" class="rate-remove" aria-label="Eliminar rango">Quitar</button></td>`;
+                rows.append(row);
+                row.querySelector('.rate-remove').addEventListener('click', () => { row.remove(); reindex(); });
+                reindex();
+            });
+
+            rows.addEventListener('click', event => {
+                const button = event.target.closest('.rate-remove');
+                if (button && rows.children.length > 1) {
+                    button.closest('.rate-row').remove();
+                    reindex();
+                }
+            });
+            reindex();
+        })();
+    </script>
+}

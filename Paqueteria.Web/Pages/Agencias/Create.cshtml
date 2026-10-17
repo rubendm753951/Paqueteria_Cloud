@@ -1,160 +1,127 @@
 @page
 @model Paqueteria.Web.Pages.Agencias.CreateModel
+@{
+    ViewData["Title"] = Model.IsEditing ? "Editar agencia" : "Nueva agencia";
+}
 
-        @{
-        ViewData["Title"] = "Create";
-        }
-        
-        <h1>Create</h1>
-        
-    <h4>CAgencia</h4>
-    <hr />
-    <div class="row">
-    <div class="col-md-4">
-    <form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CAgencia.IdCorporativo" class="control-label"></label>
-                <select asp-for="CAgencia.IdCorporativo" class ="form-control" asp-items="ViewBag.IdCorporativo" ></select>
+<section class="agency-manage-page">
+    <header class="agency-manage-heading">
+        <div>
+            <p class="agency-kicker">SIEXPRO / CATÁLOGOS</p>
+            <h1>@(Model.IsEditing ? "Editar agencia" : "Administrar agencias")</h1>
+            <p>Registra una agencia o carga una existente que tengas permiso para modificar.</p>
+        </div>
+        <a asp-page="./Index" class="agency-back-link">Volver a agencias</a>
+    </header>
+
+    @if (Model.CanEditAgencies)
+    {
+        <section class="agency-loader" aria-labelledby="agency-loader-title">
+            <div>
+                <p class="agency-kicker">CARGAR REGISTRO</p>
+                <h2 id="agency-loader-title">Agencia existente</h2>
             </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.IdPais" class="control-label"></label>
-                <select asp-for="CAgencia.IdPais" class ="form-control" asp-items="ViewBag.IdPais" ></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.Nombre" class="control-label"></label>
-                <input asp-for="CAgencia.Nombre" class="form-control" />
-                <span asp-validation-for="CAgencia.Nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.Direccion" class="control-label"></label>
-                <input asp-for="CAgencia.Direccion" class="form-control" />
-                <span asp-validation-for="CAgencia.Direccion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.EstadoProvincia" class="control-label"></label>
-                <input asp-for="CAgencia.EstadoProvincia" class="form-control" />
-                <span asp-validation-for="CAgencia.EstadoProvincia" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.Ciudad" class="control-label"></label>
-                <input asp-for="CAgencia.Ciudad" class="form-control" />
-                <span asp-validation-for="CAgencia.Ciudad" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.Telefono" class="control-label"></label>
-                <input asp-for="CAgencia.Telefono" class="form-control" />
-                <span asp-validation-for="CAgencia.Telefono" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.FechaAlta" class="control-label"></label>
-                <input asp-for="CAgencia.FechaAlta" class="form-control" />
-                <span asp-validation-for="CAgencia.FechaAlta" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.FechaTermino" class="control-label"></label>
-                <input asp-for="CAgencia.FechaTermino" class="form-control" />
-                <span asp-validation-for="CAgencia.FechaTermino" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.IdMoneda" class="control-label"></label>
-                <select asp-for="CAgencia.IdMoneda" class ="form-control" asp-items="ViewBag.IdMoneda" ></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.LimiteCredito" class="control-label"></label>
-                <input asp-for="CAgencia.LimiteCredito" class="form-control" />
-                <span asp-validation-for="CAgencia.LimiteCredito" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.Nit" class="control-label"></label>
-                <input asp-for="CAgencia.Nit" class="form-control" />
-                <span asp-validation-for="CAgencia.Nit" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="CAgencia.RequiereAsignacion" /> @Html.DisplayNameFor(model => model.CAgencia.RequiereAsignacion)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.IdRecibo" class="control-label"></label>
-                <select asp-for="CAgencia.IdRecibo" class ="form-control" asp-items="ViewBag.IdRecibo" ></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.Factor" class="control-label"></label>
-                <input asp-for="CAgencia.Factor" class="form-control" />
-                <span asp-validation-for="CAgencia.Factor" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="CAgencia.EsquemaPorFactor" /> @Html.DisplayNameFor(model => model.CAgencia.EsquemaPorFactor)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.CostoAdicional" class="control-label"></label>
-                <input asp-for="CAgencia.CostoAdicional" class="form-control" />
-                <span asp-validation-for="CAgencia.CostoAdicional" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="CAgencia.GuiaEstafeta" /> @Html.DisplayNameFor(model => model.CAgencia.GuiaEstafeta)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.Noexterior" class="control-label"></label>
-                <input asp-for="CAgencia.Noexterior" class="form-control" />
-                <span asp-validation-for="CAgencia.Noexterior" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.Colonia" class="control-label"></label>
-                <input asp-for="CAgencia.Colonia" class="form-control" />
-                <span asp-validation-for="CAgencia.Colonia" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.Municipio" class="control-label"></label>
-                <input asp-for="CAgencia.Municipio" class="form-control" />
-                <span asp-validation-for="CAgencia.Municipio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.CodigoPostal" class="control-label"></label>
-                <input asp-for="CAgencia.CodigoPostal" class="form-control" />
-                <span asp-validation-for="CAgencia.CodigoPostal" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.Email" class="control-label"></label>
-                <input asp-for="CAgencia.Email" class="form-control" />
-                <span asp-validation-for="CAgencia.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.Rfc" class="control-label"></label>
-                <input asp-for="CAgencia.Rfc" class="form-control" />
-                <span asp-validation-for="CAgencia.Rfc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CAgencia.TipoDePago" class="control-label"></label>
-                <input asp-for="CAgencia.TipoDePago" class="form-control" />
-                <span asp-validation-for="CAgencia.TipoDePago" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="CAgencia.PeRemitente" /> @Html.DisplayNameFor(model => model.CAgencia.PeRemitente)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="CAgencia.FedexRemitente" /> @Html.DisplayNameFor(model => model.CAgencia.FedexRemitente)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+            <form method="get" class="agency-loader-controls">
+                <select name="agencyId" aria-label="Seleccionar agencia para cargar">
+                    @if (Model.CanCreateAgency)
+                    {
+                        <option value="">Nueva agencia</option>
+                    }
+                    else
+                    {
+                        <option value="">Selecciona una agencia</option>
+                    }
+                    @foreach (var agency in Model.EditableAgencies)
+                    {
+                        <option value="@agency.Id" selected="@(Model.SelectedAgencyId == agency.Id ? "selected" : null)">@agency.Name · ID @agency.Id</option>
+                    }
+                </select>
+                <button type="submit" class="agency-secondary-button">Cargar agencia</button>
+            </form>
+        </section>
+    }
+
+    @if (!Model.CanCreateAgency && !Model.IsEditing)
+    {
+        <div class="agency-no-create">Selecciona una agencia existente para cargar sus datos.</div>
+    }
+    else
+    {
+        <form method="post" class="agency-form">
+            <div asp-validation-summary="ModelOnly" class="agency-validation" role="alert"></div>
+            <input type="hidden" asp-for="CAgencia.IdAgencia" />
+
+            <section class="agency-form-section">
+                <div class="agency-section-title"><span>01</span><div><p class="agency-kicker">IDENTIDAD</p><h2>Datos principales</h2></div></div>
+                <div class="agency-fields">
+                    <label class="agency-field" asp-for="CAgencia.Nombre">Nombre de agencia<input asp-for="CAgencia.Nombre" autocomplete="organization" /><span asp-validation-for="CAgencia.Nombre"></span></label>
+                    <label class="agency-field" asp-for="CAgencia.IdCorporativo">Corporativo
+                        <select asp-for="CAgencia.IdCorporativo"><option value="0">Selecciona un corporativo</option>@foreach (var option in Model.Corporativos) { <option value="@option.Id">@option.Label</option> }</select>
+                        <span asp-validation-for="CAgencia.IdCorporativo"></span>
+                    </label>
+                    <label class="agency-field" asp-for="CAgencia.IdPais">País
+                        <select asp-for="CAgencia.IdPais"><option value="0">Selecciona un país</option>@foreach (var option in Model.Paises) { <option value="@option.Id">@option.Label</option> }</select>
+                        <span asp-validation-for="CAgencia.IdPais"></span>
+                    </label>
+                    <label class="agency-field" asp-for="CAgencia.IdMoneda">Moneda
+                        <select asp-for="CAgencia.IdMoneda"><option value="0">Selecciona una moneda</option>@foreach (var option in Model.Monedas) { <option value="@option.Id">@option.Label</option> }</select>
+                        <span asp-validation-for="CAgencia.IdMoneda"></span>
+                    </label>
+                    <div class="agency-inline-fields">
+                        <label class="agency-field" asp-for="CAgencia.FechaAlta">Fecha de alta<input asp-for="CAgencia.FechaAlta" type="date" /></label>
+                        <label class="agency-field" asp-for="CAgencia.FechaTermino">Fecha de término<input asp-for="CAgencia.FechaTermino" type="date" /></label>
+                    </div>
+                </div>
+            </section>
+
+            <section class="agency-form-section">
+                <div class="agency-section-title"><span>02</span><div><p class="agency-kicker">UBICACIÓN Y CONTACTO</p><h2>Dirección de la agencia</h2></div></div>
+                <div class="agency-fields">
+                    <label class="agency-field" asp-for="CAgencia.Direccion">Dirección<input asp-for="CAgencia.Direccion" autocomplete="street-address" /></label>
+                    <label class="agency-field" asp-for="CAgencia.Noexterior">Número exterior<input asp-for="CAgencia.Noexterior" /></label>
+                    <label class="agency-field" asp-for="CAgencia.Colonia">Colonia<input asp-for="CAgencia.Colonia" autocomplete="address-level3" /></label>
+                    <label class="agency-field" asp-for="CAgencia.Municipio">Municipio<input asp-for="CAgencia.Municipio" autocomplete="address-level2" /></label>
+                    <label class="agency-field" asp-for="CAgencia.Ciudad">Ciudad<input asp-for="CAgencia.Ciudad" /></label>
+                    <label class="agency-field" asp-for="CAgencia.EstadoProvincia">Estado / provincia<input asp-for="CAgencia.EstadoProvincia" autocomplete="address-level1" /></label>
+                    <label class="agency-field" asp-for="CAgencia.CodigoPostal">Código postal<input asp-for="CAgencia.CodigoPostal" autocomplete="postal-code" /></label>
+                    <label class="agency-field" asp-for="CAgencia.Telefono">Teléfono<input asp-for="CAgencia.Telefono" autocomplete="tel" /></label>
+                    <label class="agency-field" asp-for="CAgencia.Email">Correo electrónico<input asp-for="CAgencia.Email" type="email" autocomplete="email" /><span asp-validation-for="CAgencia.Email"></span></label>
+                </div>
+            </section>
+
+            <section class="agency-form-section">
+                <div class="agency-section-title"><span>03</span><div><p class="agency-kicker">COBRO Y OPERACIÓN</p><h2>Parámetros comerciales</h2></div></div>
+                <div class="agency-fields">
+                    <label class="agency-field" asp-for="CAgencia.IdRecibo">Formato de recibo
+                        <select asp-for="CAgencia.IdRecibo"><option value="0">Selecciona un formato</option>@foreach (var option in Model.Recibos) { <option value="@option.Id">@option.Label</option> }</select>
+                        <span asp-validation-for="CAgencia.IdRecibo"></span>
+                    </label>
+                    <label class="agency-field" asp-for="CAgencia.LimiteCredito">Límite de crédito<input asp-for="CAgencia.LimiteCredito" type="number" step="0.01" min="0" /></label>
+                    <label class="agency-field" asp-for="CAgencia.Nit">NIT<input asp-for="CAgencia.Nit" /></label>
+                    <label class="agency-field" asp-for="CAgencia.Rfc">RFC<input asp-for="CAgencia.Rfc" /></label>
+                    <label class="agency-field" asp-for="CAgencia.TipoDePago">Tipo de pago<input asp-for="CAgencia.TipoDePago" /></label>
+                    <div class="agency-inline-fields">
+                        <label class="agency-field" asp-for="CAgencia.Factor">Factor<input asp-for="CAgencia.Factor" type="number" step="0.0001" min="0" /></label>
+                        <label class="agency-field" asp-for="CAgencia.CostoAdicional">Costo adicional<input asp-for="CAgencia.CostoAdicional" type="number" step="0.0001" min="0" /></label>
+                    </div>
+                    <div class="agency-toggles">
+                        <label><input asp-for="CAgencia.RequiereAsignacion" /> Requiere asignación</label>
+                        <label><input asp-for="CAgencia.EsquemaPorFactor" /> Aplicar esquema por factor</label>
+                        <label><input asp-for="CAgencia.GuiaEstafeta" /> Usa guías Estafeta</label>
+                        <label><input asp-for="CAgencia.PeRemitente" /> PE como remitente</label>
+                        <label><input asp-for="CAgencia.FedexRemitente" /> FedEx como remitente</label>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="agency-form-footer">
+                <span>@(Model.IsEditing ? $"Editando agencia ID {Model.CAgencia.IdAgencia}" : "Los campos marcados son necesarios para crear la agencia.")</span>
+                <button type="submit" class="agency-submit">@(Model.IsEditing ? "Guardar cambios" : "Crear agencia") <span aria-hidden="true">&rarr;</span></button>
+            </footer>
         </form>
-    </div>
-</div>
-
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
+    }
+</section>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
 }

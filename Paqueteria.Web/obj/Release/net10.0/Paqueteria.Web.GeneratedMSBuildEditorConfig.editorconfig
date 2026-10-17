@@ -1,15 +1,23 @@
 is_global = true
 build_property.TargetFramework = net10.0
-build_property.TargetFrameworkIdentifier = .NETCoreApp
-build_property.TargetFrameworkVersion = v10.0
+build_property.TargetFramework = net10.0
+build_property.TargetPlatformMinVersion = 
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
 build_property.ProjectTypeGuids = 
 build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
 build_property.PlatformNeutralAssembly = 
 build_property.EnforceExtendedAnalyzerRules = 
-build_property.EntryPointFilePath = 
+build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v10.0
+build_property.EntryPointFilePath = 
 build_property.RootNamespace = Paqueteria.Web
 build_property.RootNamespace = Paqueteria.Web
 build_property.ProjectDir = C:\Users\ruben\source\repos\rubendm753951\Paqueteria_Cloud\Paqueteria.Web\
@@ -23,6 +31,82 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Areas/Identity/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Areas/Identity/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Agencias/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbmNpYXNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Agencias/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbmNpYXNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Agencias/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbmNpYXNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Shared/_AuthLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9BdXRoTGF5b3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Shared/_LoginPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Areas/Identity/Pages/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = b-ns8qxvmnsb
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Agencias/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbmNpYXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = b-7tjoo8oz4b
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Agencias/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWdlbmNpYXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-n3wk6l056d
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-rid6xlrbfc
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Ordenes/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcT3JkZW5lc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-2pcu21ll2v
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Productos/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdG9zXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = b-mtoxterorw
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Productos/Tarifario.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdG9zXFRhcmlmYXJpby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = b-v4qalmm5cd
+
+[C:/Users/ruben/source/repos/rubendm753951/Paqueteria_Cloud/Paqueteria.Web/Pages/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-73716xeyx6

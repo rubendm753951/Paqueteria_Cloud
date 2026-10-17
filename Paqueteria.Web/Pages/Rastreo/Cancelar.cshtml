@@ -1,0 +1,14 @@
+@page
+@model Paqueteria.Web.Pages.Rastreo.CancelarModel
+@{ ViewData["Title"] = "Cancelar suscripción"; }
+<section class="tracking-public tracking-result">
+    @if (Model.IsValid)
+    {
+        <h1>Suscripción cancelada</h1><p>Ya no recibirás actualizaciones del envío <strong>@Model.TrackingNumber</strong>.</p>
+    }
+    else
+    {
+        <h1>Enlace no válido</h1><p>No fue posible localizar esta suscripción.</p>
+    }
+    <a asp-page="/Rastreo/Index">Volver al rastreo</a>
+</section>

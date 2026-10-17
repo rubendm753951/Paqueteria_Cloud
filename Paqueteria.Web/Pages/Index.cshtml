@@ -1,10 +1,101 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="workspace-home">
+    <header class="workspace-heading">
+        <div>
+            <p class="workspace-eyebrow">SIEXPRO / SISTEMA EXPRESS</p>
+            <h1>Buen día</h1>
+            <p class="workspace-intro">@Model.DisplayName <span>·</span> Este es tu espacio de trabajo</p>
+        </div>
+        <div class="workspace-date">OPERACIONES</div>
+    </header>
+
+    <div class="workspace-section-heading">
+        <div>
+            <p class="workspace-eyebrow">TU ACCESO</p>
+            <h2>Módulos disponibles</h2>
+        </div>
+        @if (Model.AvailableModuleCount > 0)
+        {
+            <span class="workspace-count">@Model.AvailableModuleCount @(Model.AvailableModuleCount == 1 ? "módulo disponible" : "módulos disponibles")</span>
+        }
+    </div>
+
+    @if (Model.AvailableModuleCount > 0)
+    {
+        <div class="workspace-grid">
+            @if (Model.CanViewAgencies)
+            {
+                <article class="workspace-page">
+                    <div class="workspace-page-top">
+                        <span class="workspace-page-mark" aria-hidden="true">AG</span>
+                        <span class="workspace-access-label">DISPONIBLE</span>
+                    </div>
+                    <h3>Agencias</h3>
+                    <p>Consulta las agencias habilitadas para tu cuenta.</p>
+                    <div class="workspace-page-footer">
+                        <span>@Model.AgencyCount @(Model.AgencyCount == 1 ? "agencia asignada" : "agencias asignadas")</span>
+                        <a asp-page="/Agencias/Index" class="workspace-open-link">Abrir módulo <span aria-hidden="true">&rarr;</span></a>
+                    </div>
+                </article>
+            }
+            @if (Model.CanCreateOrders)
+            {
+                <article class="workspace-page workspace-order-card">
+                    <div class="workspace-page-top">
+                        <span class="workspace-page-mark" aria-hidden="true">OE</span>
+                        <span class="workspace-access-label">DISPONIBLE</span>
+                    </div>
+                    <h3>Order Entry</h3>
+                    <p>Captura direcciones, elige un servicio y cotiza paquetes.</p>
+                    <div class="workspace-page-footer">
+                        <span>Envíos y cotizaciones</span>
+                        <a asp-page="/Ordenes/Create" class="workspace-open-link">Nueva orden <span aria-hidden="true">&rarr;</span></a>
+                    </div>
+                </article>
+            }
+            @if (Model.CanViewProducts)
+            {
+                <article class="workspace-page">
+                    <div class="workspace-page-top">
+                        <span class="workspace-page-mark" aria-hidden="true">PR</span>
+                        <span class="workspace-access-label">DISPONIBLE</span>
+                    </div>
+                    <h3>Productos</h3>
+                    <p>Consulta el catálogo de servicios y sus asignaciones.</p>
+                    <div class="workspace-page-footer">
+                        <span>Catálogo maestro</span>
+                        <a asp-page="/Productos/Index" class="workspace-open-link">Abrir catálogo <span aria-hidden="true">&rarr;</span></a>
+                    </div>
+                </article>
+            }
+            @if (Model.CanViewShipments)
+            {
+                <article class="workspace-page workspace-order-card">
+                    <div class="workspace-page-top">
+                        <span class="workspace-page-mark" aria-hidden="true">TR</span>
+                        <span class="workspace-access-label">DISPONIBLE</span>
+                    </div>
+                    <h3>Seguimiento</h3>
+                    <p>Administra conductores, intentos de entrega y confirmaciones.</p>
+                    <div class="workspace-page-footer">
+                        <span>Operación de última milla</span>
+                        <a asp-page="/Envios/Index" class="workspace-open-link">Abrir módulo <span aria-hidden="true">&rarr;</span></a>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="workspace-empty">
+            <span class="workspace-empty-mark" aria-hidden="true">—</span>
+            <h3>Aún no tienes módulos asignados</h3>
+            <p>Solicita al administrador que habilite los módulos correspondientes a tu cuenta.</p>
+        </div>
+    }
+</section>
